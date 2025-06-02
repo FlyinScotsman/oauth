@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick OAuth2 Guide - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="../patterns/overview.html" class="nav-link">All Patterns</a>
+                <a href="comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Quick OAuth2 Guide</h1>
+            <p>Simple explanations of when to use each OAuth2 flow</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div class="step-title">OAuth2 Pattern Quick Reference</div>
+            <div class="step-description">
+                This guide provides a quick overview of all OAuth2 patterns, helping you understand when to use each one.
+                Use this as a reference when making architecture decisions.
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin: 20px 0;">
+                <h3>🧑 For User Authentication (Authorization Code Flows)</h3>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li><strong>A1 (JWT + Refresh):</strong> High-performance web applications</li>
+                    <li><strong>A2 (Opaque + Introspection):</strong> Enterprise systems needing immediate revocation</li>
+                    <li><strong>A3 (PKCE):</strong> Single Page Apps and mobile applications</li>
+                    <li><strong>A4 (Device Flow):</strong> Smart TVs, IoT devices, CLI tools</li>
+                </ul>
+
+                <h3>🤖 For Service-to-Service (Client Credentials)</h3>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li><strong>B1 (JWT + Refresh):</strong> Production microservices with high availability</li>
+                    <li><strong>B2 (Opaque + Refresh):</strong> Enterprise services with audit requirements</li>
+                    <li><strong>B3 (Simple):</strong> Development and simple integrations</li>
+                </ul>
+
+                <h3>💡 Quick Decision Points</h3>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li><strong>JWT vs Opaque:</strong> JWT = Performance, Opaque = Control</li>
+                    <li><strong>Refresh Tokens:</strong> Use for production, skip for development</li>
+                    <li><strong>PKCE:</strong> Required for public clients (SPAs, mobile)</li>
+                </ul>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">📊 Pattern Comparison Matrix</h3>
+                
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: #667eea; color: white;">
+                                <th style="padding: 15px; text-align: left;">Pattern</th>
+                                <th style="padding: 15px; text-align: left;">Use Case</th>
+                                <th style="padding: 15px; text-align: left;">Token Type</th>
+                                <th style="padding: 15px; text-align: left;">Performance</th>
+                                <th style="padding: 15px; text-align: left;">Security</th>
+                                <th style="padding: 15px; text-align: left;">Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">A1</td>
+                                <td style="padding: 15px;">Web Applications</td>
+                                <td style="padding: 15px;">JWT + Refresh</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">A2</td>
+                                <td style="padding: 15px;">Enterprise Web</td>
+                                <td style="padding: 15px;">Opaque + Introspection</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                                <td style="padding: 15px; color: #4CAF50;">Very High</td>
+                                <td style="padding: 15px; color: #f44336;">High</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">A3</td>
+                                <td style="padding: 15px;">SPA/Mobile</td>
+                                <td style="padding: 15px;">JWT + PKCE</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">A4</td>
+                                <td style="padding: 15px;">Device/IoT</td>
+                                <td style="padding: 15px;">JWT + Device Flow</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #f44336;">High</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">B1</td>
+                                <td style="padding: 15px;">Microservices</td>
+                                <td style="padding: 15px;">JWT + Refresh</td>
+                                <td style="padding: 15px; color: #4CAF50;">Very High</td>
+                                <td style="padding: 15px; color: #4CAF50;">High</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e9ecef;">
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">B2</td>
+                                <td style="padding: 15px;">Enterprise Services</td>
+                                <td style="padding: 15px;">Opaque + Refresh</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                                <td style="padding: 15px; color: #4CAF50;">Very High</td>
+                                <td style="padding: 15px; color: #f44336;">High</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 15px; font-weight: bold; color: #667eea;">B3</td>
+                                <td style="padding: 15px;">Development</td>
+                                <td style="padding: 15px;">Simple</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                                <td style="padding: 15px; color: #FF9800;">Medium</td>
+                                <td style="padding: 15px; color: #4CAF50;">Low</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">🎯 When to Choose JWT</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>High-performance requirements</li>
+                        <li>Distributed microservices</li>
+                        <li>Offline token validation needed</li>
+                        <li>Stateless architecture preferred</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f3e5f5; border-left: 4px solid #9C27B0; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #7B1FA2; margin-bottom: 15px;">🎛️ When to Choose Opaque</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Immediate token revocation needed</li>
+                        <li>Centralized token management</li>
+                        <li>Audit and compliance requirements</li>
+                        <li>Fine-grained access control</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">🔄 When to Use Refresh Tokens</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Production environments</li>
+                        <li>Long-running applications</li>
+                        <li>Enhanced security requirements</li>
+                        <li>Token rotation strategies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="margin-bottom: 20px;">🚀 Architecture Decision Framework</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 10px;">1. Identify Your Client Type</h4>
+                        <p style="opacity: 0.9; font-size: 0.9em;">Confidential (server-side) or Public (SPA/mobile)?</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">2. Determine User Involvement</h4>
+                        <p style="opacity: 0.9; font-size: 0.9em;">User authentication or service-to-service?</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">3. Consider Performance vs Control</h4>
+                        <p style="opacity: 0.9; font-size: 0.9em;">JWT for speed, Opaque for governance.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px;">4. Evaluate Security Requirements</h4>
+                        <p style="opacity: 0.9; font-size: 0.9em;">Enterprise compliance vs development simplicity.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+                <a href="../patterns/overview.html" class="btn btn-primary">View All Patterns →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="basics.html">Learn Basics</a>
+                <a href="../patterns/overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
