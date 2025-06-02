@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2: Client Credentials + Opaque + Refresh - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>B2: Client Credentials + Opaque + Refresh</h1>
+            <p>Enterprise services with centralized token control</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #f3e5f5; border-left: 4px solid #9C27B0; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #7B1FA2; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Enterprise systems requiring strict governance and audit requirements.
+                    This pattern prioritizes centralized control and immediate revocation over performance.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #7B1FA2;">Client Type:</strong><br/>
+                        <span style="color: #666;">Confidential (Service)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Token Type:</strong><br/>
+                        <span style="color: #666;">Opaque + Refresh Token</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Use Case:</strong><br/>
+                        <span style="color: #666;">Enterprise Governance</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Complexity:</strong><br/>
+                        <span style="color: #666;">High</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the Client Credentials flow with opaque tokens requiring introspection calls.
+                Note the trade-off: more network calls for complete centralized control and audit capabilities.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server  
+    participant TS as Token Store/Database
+
+    Note over CA,TS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for microservices requiring governance)
+
+    Note over CA: Background refresh process
+    loop Every 45 minutes
+        CA->>AS: 1. Request access token using client credentials
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+        AS->>TS: 2. Generate opaque access token + refresh token  
+        TS->>AS: 3. Store token metadata
+        AS->>CA: 4. New opaque access_token + refresh_token
+        Note over CA: "access_token": "by2wuC2mhteacqCMh8AgG4..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA"<br/>"scope": "read write"
+        CA->>CA: 5. Cache new tokens
+    end
+
+    Note over CA: API call process
+    CA->>CA: 6. Get cached token
+    CA->>AS: 7. POST /introspect (token)
+    Note over AS: POST https://auth.server.com/introspect<br/>token=OPAQUE_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    AS->>TS: 8. Lookup token metadata
+    TS->>AS: 9. Return token details  
+    AS->>CA: 10. Token validity + metadata
+    Note over CA: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"iat": 1419350238<br/>"sub": "client_service_account"<br/>"aud": "https://protected.example.net/resource"
+    CA->>RS: 11. API call with opaque Bearer token
+    Note over RS: Authorization: Bearer by2wuC2mhteacqCMh8AgG4...
+    RS->>AS: 12. POST /introspect (token)
+    AS->>TS: 13. Lookup token metadata
+    TS->>AS: 14. Return token details
+    AS->>RS: 15. Token validity + metadata
+    RS->>CA: 16. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 17. API call with expired token
+    RS->>AS: 18. POST /introspect (token)
+    AS->>TS: 19. Lookup token metadata
+    TS->>AS: 20. Token invalid/expired
+    AS->>RS: 21. Token invalid/expired  
+    RS->>CA: 22. 401 Unauthorized
+    CA->>AS: 23. POST /token (client_credentials + refresh_token)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    AS->>TS: 24. Generate new opaque access token + refresh token
+    TS->>AS: 25. Store new token metadata
+    AS->>CA: 26. New opaque access_token + refresh_token
+    CA->>RS: 27. Retry API call with new token
+    RS->>CA: 28. Protected data
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Immediate token revocation</li>
+                        <li>Complete audit trail for all access</li>
+                        <li>Real-time policy enforcement</li>
+                        <li>Centralized access control</li>
+                        <li>Detailed security monitoring</li>
+                        <li>Enterprise compliance ready</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Higher latency due to introspection</li>
+                        <li>Auth server becomes critical dependency</li>
+                        <li>Increased network traffic</li>
+                        <li>More complex monitoring required</li>
+                        <li>Potential bottleneck at scale</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Implement introspection caching</li>
+                        <li>Use circuit breakers for resilience</li>
+                        <li>Design for auth server HA</li>
+                        <li>Monitor introspection performance</li>
+                        <li>Implement fallback strategies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🏢 Enterprise Governance Benefits</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔍 Real-time Control</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Instantly revoke service access, update scopes, and enforce new policies without service restarts.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📊 Comprehensive Auditing</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Every service call creates audit records with detailed metadata for compliance reporting.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎛️ Dynamic Policies</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Update access policies, rate limits, and permissions in real-time across all services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #f3e5f5; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #7B1FA2; margin-bottom: 20px;">🛡️ Security & Compliance Features</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📋 Audit Compliance</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>SOX, GDPR, HIPAA compliance ready</li>
+                            <li>Detailed access logs with timestamps</li>
+                            <li>User and service attribution</li>
+                            <li>Failed access attempt tracking</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🚨 Threat Detection</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Unusual access pattern detection</li>
+                            <li>Geographic anomaly alerts</li>
+                            <li>Token abuse monitoring</li>
+                            <li>Real-time security responses</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⚡ Response Capabilities</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Immediate service access revocation</li>
+                            <li>Emergency lockdown procedures</li>
+                            <li>Selective scope restrictions</li>
+                            <li>Incident response automation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">🏗️ Architecture Considerations</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔄 Caching Strategy</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Cache introspection results with short TTL (1-5 minutes) to balance performance and real-time control.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📈 High Availability</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Deploy auth server in active-active configuration with shared token store for zero-downtime operations.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🚦 Rate Limiting</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Implement rate limiting on introspection endpoint to prevent abuse and ensure fair resource allocation.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔧 Monitoring</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Monitor introspection latency, success rates, and token usage patterns for operational insights.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="b1.html" class="btn btn-secondary">← Previous: B1 (JWT + Refresh)</a>
+                <a href="b3.html" class="btn btn-primary">Next: B3 (Simple) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics
