@@ -760,13 +760,347 @@
             };
 
             const diagrams = {
-                'A1': 'sequenceDiagram\n    participant U as User\n    participant B as Browser\n    participant A as Web App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    U->>B: Access protected resource\n    B->>A: Request page\n    A->>A: Check session\n    A->>B: Redirect to /authorize\n    B->>AS: GET /authorize\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>B: Redirect with auth code\n    B->>A: GET /callback?code=abc123\n    A->>AS: POST /token\n    AS->>A: JWT access_token + refresh_token\n    A->>API: API call with JWT\n    API->>A: Protected data',
-                'A2': 'sequenceDiagram\n    participant U as User\n    participant B as Browser\n    participant A as Web App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    U->>B: Access protected resource\n    B->>A: Request page\n    A->>A: Check session\n    A->>B: Redirect to /authorize\n    B->>AS: GET /authorize\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>B: Redirect with auth code\n    B->>A: GET /callback?code=abc123\n    A->>AS: POST /token\n    AS->>A: Opaque access_token + refresh_token\n    A->>AS: POST /introspect (token)\n    AS->>A: Token metadata\n    A->>API: API call with opaque token\n    API->>AS: POST /introspect (token)\n    AS->>API: Token metadata\n    API->>A: Protected data',
-                'A3': 'sequenceDiagram\n    participant U as User\n    participant SPA as Single Page App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    SPA->>SPA: Generate PKCE challenge\n    U->>SPA: Click login\n    SPA->>AS: Redirect with code_challenge\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>SPA: Redirect with auth code\n    SPA->>AS: POST /token with code_verifier\n    AS->>SPA: JWT access_token\n    SPA->>API: API call with JWT\n    API->>SPA: Protected data',
-                'A4': 'sequenceDiagram\n    participant D as Device\n    participant U as User\n    participant B as User Browser\n    participant AS as Auth Server\n    participant API as Resource API\n\n    D->>AS: POST /device_authorization\n    AS->>D: device_code + user_code + verification_uri\n    D->>U: Display: "Go to verification_uri, enter user_code"\n    U->>B: Navigate to verification_uri\n    B->>AS: GET verification_uri\n    AS->>U: Enter user_code form\n    U->>AS: Submit user_code\n    AS->>U: Show login form\n    U->>AS: Username/password\n    \n    loop Polling\n        D->>AS: POST /token (device_code)\n        AS->>D: authorization_pending OR access_token\n    end\n    \n    AS->>D: JWT access_token\n    D->>API: API call with JWT\n    API->>D: Protected data',
-                'B1': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: JWT access_token + refresh_token\n    S1->>S2: API call with JWT\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New JWT tokens',
-                'B2': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: Opaque access_token + refresh_token\n    S1->>AS: POST /introspect (token)\n    AS->>S1: Token validity\n    S1->>S2: API call with opaque token\n    S2->>AS: POST /introspect (token)\n    AS->>S2: Token validity\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New opaque tokens',
-                'B3': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: access_token (short-lived)\n    S1->>S2: API call with token\n    S2->>S1: Protected data\n\n    Note over S1: Token expiry\n    S1->>S2: API call with expired token\n    S2->>S1: 401 Unauthorized\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: New access_token\n    S1->>S2: Retry API call\n    S2->>S1: Protected data'
+                'A1': `sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over U,RS: OAuth2 Authorization Code Flow with JWT Token<br/>(Best approach for Browser-hosted App for redirections)
+
+    U->>CA: 1. Click "Login" or access protected resource
+    CA->>U: 2. Redirect to Authorization Server
+    
+    Note over AS: GET https://auth.server.com/authorize?<br/>response_type=code&client_id=CLIENT_ID&<br/>redirect_uri=REDIRECT_URI&scope=SCOPE&<br/>state=RANDOM_STATE_VALUE
+    
+    U->>AS: 3. User authentication (username/password)
+    AS->>AS: 4. User consent screen
+    AS->>U: 5. User grants consent
+    AS->>CA: 6. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 7. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>CA: 8. Exchange authorization code for tokens
+    
+    Note over CA: Returns JWT access token + refresh token
+    
+    CA->>CA: 9. Store tokens securely
+    CA->>U: 10. Return protected resource
+    U->>CA: 11. API call with JWT token
+    CA->>RS: 12. API call with JWT token
+    
+    Note over RS: Authorization: Bearer JWT_ACCESS_TOKEN
+    
+    RS->>RS: 13. Validate JWT signature<br/>(Check expiry, iss, aud, etc.)
+    RS->>CA: 14. Return protected data
+    CA->>U: 15. Return API call result
+    
+    Note over U,RS: Token Refresh Flow (when JWT expires)
+    
+    CA->>RS: 16. API call with expired JWT
+    RS->>CA: 17. Return 401 Unauthorized
+    CA->>AS: 18. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    
+    AS->>CA: 19. Generate new JWT access token
+    
+    Note over CA: Returns new JWT access token + refresh token
+    
+    CA->>CA: 20. Store tokens securely
+    CA->>RS: 21. Return with JWT access token
+    RS->>CA: 22. Return protected data`,
+
+                'A2': `sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)  
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+    participant TS as Token Store/Database
+
+    Note over U,TS: OAuth2 Authorization Code Flow with Opaque Token<br/>(Best approach for Browser-hosted App for redirections)
+
+    U->>CA: 1. Click "Login" or access protected resource
+    CA->>U: 2. Redirect to Authorization Server
+    
+    Note over AS: GET https://auth.server.com/authorize?<br/>response_type=code&client_id=CLIENT_ID&<br/>redirect_uri=REDIRECT_URI&scope=SCOPE&<br/>state=RANDOM_STATE_VALUE
+    
+    U->>AS: 3. User authentication (username/password)
+    AS->>AS: 4. Show consent screen
+    AS->>U: 5. User grants consent
+    AS->>CA: 6. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 7. Browser app follows redirect with authorization code
+    CA->>AS: 8. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>TS: 9. Generate opaque access token
+    TS->>AS: 10. Store token metadata
+    AS->>CA: 11. Return opaque access token + refresh token
+    
+    Note over CA: "access_token": "by2wuC2mhteacqCMh8AgG4..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA"<br/>"scope": "read write"
+    
+    CA->>CA: 12. Store tokens securely
+    CA->>U: 13. Return protected resource
+    U->>CA: 14. API call with opaque token
+    CA->>AS: 15. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/introspect<br/>token=OPAQUE_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    
+    AS->>TS: 16. Lookup token metadata
+    TS->>AS: 17. Return token details
+    AS->>CA: 18. Token introspection response
+    
+    Note over CA: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"username": "jdoe"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"iat": 1419350238<br/>"sub": "Z5O3upPC88QrAjx00dis"<br/>"aud": "https://protected.example.net/resource"
+    
+    CA->>RS: 19. Request protected resource
+    RS->>AS: 20. Token introspection request
+    AS->>TS: 21. Lookup token metadata  
+    TS->>AS: 22. Return token details
+    AS->>RS: 23. Token introspection response
+    RS->>CA: 24. Return protected data
+    CA->>U: 25. Return API call result`,
+
+                'A3': `sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over U,RS: OAuth2 Authorization Code Flow with PKCE<br/>(Best approach for Browser-hosted App for redirections)
+
+    CA->>CA: 1. Application starts to access protected resource<br/>at the request of user, for the enterprise
+    CA->>CA: 2. Check code verifier
+    CA->>CA: 3. User grants consent
+    CA->>CA: 4. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 5. Browser app follows redirect with authorization code
+    CA->>AS: 6. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&<br/>code_verifier=CODE_VERIFIER&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>AS: 7. Validate code challenge vs verifier
+    AS->>CA: 8. Returns JWT access token + refresh token
+    
+    Note over CA: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+    
+    CA->>CA: 9. Store tokens in memory
+    CA->>U: 10. Return protected resource  
+    U->>CA: 11. Request protected resource
+    CA->>RS: 12. API call with opaque token
+    
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+    
+    RS->>AS: 13. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/introspect<br/>token=JWT_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    
+    AS->>RS: 14. Token introspection response
+    
+    Note over RS: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"username": "jdoe"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"sub": "Z5O3upPC88QrAjx00dis"<br/>"aud": "https://protected.example.net/resource"
+    
+    RS->>CA: 15. Return protected data
+    CA->>U: 16. Return API call result
+    
+    Note over U,RS: Token Refresh Flow (when access token expires)
+    
+    CA->>RS: 17. Return token request
+    RS->>CA: 18. Return 401 Unauthorized  
+    CA->>AS: 19. Token refresh request
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID
+    
+    AS->>CA: 20. Generate new JWT access token
+    CA->>CA: 21. Update token in memory
+    CA->>RS: 22. Return with JWT access token
+    RS->>CA: 23. Return protected data`,
+
+                'A4': `sequenceDiagram
+    participant D as Device
+    participant U as User
+    participant B as User's Browser  
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over D,RS: OAuth2 Device Authorization Flow<br/>(Best approach for Browserless or Input constrained devices)
+
+    D->>AS: 1. Initiate device to access protected resource<br/>at the request of user, for the enterprise
+
+    Note over AS: POST https://auth.server.com/device_authorization<br/>client_id=CLIENT_ID&<br/>scope=SCOPE
+
+    AS->>D: 2. Device code + user code + verification URI
+
+    Note over D: device_code + user_code + verification_uri<br/>+ user_code_expires_in + interval
+
+    D->>U: 3. Display: "Go to verification_uri, enter user_code"
+
+    loop Polling every interval
+        D->>AS: 4. Check device code status
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=urn:ietf:params:oauth:grant-type:device_code&<br/>device_code=DEVICE_CODE&<br/>client_id=CLIENT_ID
+        AS->>D: 5. authorization_pending OR slow_down OR access_denied OR expired_token
+    end
+
+    U->>B: 6. Navigate to verification_uri
+    B->>AS: 7. GET verification_uri  
+    AS->>U: 8. Enter user_code form
+    U->>AS: 9. Submit user_code
+    AS->>U: 10. Show login form
+    U->>AS: 11. Username/password
+    AS->>U: 12. Show consent screen
+    U->>AS: 13. User grants consent
+    AS->>B: 14. Device authorization complete
+
+    Note over AS: Device gets approved after successful authentication
+
+    D->>AS: 15. Final polling request
+    AS->>D: 16. JWT access_token + refresh_token
+
+    Note over D: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+
+    D->>D: 17. Store tokens on constant update
+    D->>RS: 18. API call with JWT Bearer token
+
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    RS->>RS: 19. Validate JWT locally<br/>(Check expiry, iss, aud, etc.)
+    RS->>D: 20. Protected data
+
+    Note over D,RS: Token Refresh Flow (background process)
+
+    D->>AS: 21. Token refresh request
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+
+    AS->>D: 22. Generate new JWT access token
+    D->>D: 23. Update token in persistent storage`,
+
+                'B1': `sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server  
+    participant RS as Resource Server
+    participant TS as Token Store/Caching
+
+    Note over CA,TS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for microservices for performance)
+
+    Note over CA: Background refresh process
+    loop Every 45 minutes
+        CA->>AS: 1. Request access token using client credentials
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+        AS->>CA: 2. Generate new JWT access token + refresh token
+        Note over CA: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+        CA->>TS: 3. Cache new tokens
+    end
+
+    Note over CA: API call process  
+    CA->>TS: 4. Get cached JWT
+    TS->>CA: 5. Return JWT access token
+    CA->>RS: 6. API call with JWT Bearer token
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+    RS->>RS: 7. Validate JWT locally (fast)
+    Note over RS: JWT Token Validation<br/>• Verify signature<br/>• Check expiry<br/>• Validate issuer<br/>• Check audience<br/>• Verify claims (scope, etc.)
+    RS->>CA: 8. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 9. API call with expired JWT
+    RS->>CA: 10. 401 Unauthorized
+    CA->>AS: 11. POST /token (client_credentials + refresh_token)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    AS->>CA: 12. New JWT access_token + refresh_token
+    CA->>TS: 13. Update token in constant storage
+    CA->>RS: 14. Retry API call with new JWT
+    RS->>CA: 15. Protected data`,
+
+                'B2': `sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server  
+    participant TS as Token Store/Database
+
+    Note over CA,TS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for microservices requiring governance)
+
+    Note over CA: Background refresh process
+    loop Every 45 minutes
+        CA->>AS: 1. Request access token using client credentials
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+        AS->>TS: 2. Generate opaque access token + refresh token  
+        TS->>AS: 3. Store token metadata
+        AS->>CA: 4. New opaque access_token + refresh_token
+        Note over CA: "access_token": "by2wuC2mhteacqCMh8AgG4..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA"<br/>"scope": "read write"
+        CA->>CA: 5. Cache new tokens
+    end
+
+    Note over CA: API call process
+    CA->>CA: 6. Get cached token
+    CA->>AS: 7. POST /introspect (token)
+    Note over AS: POST https://auth.server.com/introspect<br/>token=OPAQUE_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    AS->>TS: 8. Lookup token metadata
+    TS->>AS: 9. Return token details  
+    AS->>CA: 10. Token validity + metadata
+    Note over CA: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"iat": 1419350238<br/>"sub": "client_service_account"<br/>"aud": "https://protected.example.net/resource"
+    CA->>RS: 11. API call with opaque Bearer token
+    Note over RS: Authorization: Bearer by2wuC2mhteacqCMh8AgG4...
+    RS->>AS: 12. POST /introspect (token)
+    AS->>TS: 13. Lookup token metadata
+    TS->>AS: 14. Return token details
+    AS->>RS: 15. Token validity + metadata
+    RS->>CA: 16. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 17. API call with expired token
+    RS->>AS: 18. POST /introspect (token)
+    AS->>TS: 19. Lookup token metadata
+    TS->>AS: 20. Token invalid/expired
+    AS->>RS: 21. Token invalid/expired  
+    RS->>CA: 22. 401 Unauthorized
+    CA->>AS: 23. POST /token (client_credentials + refresh_token)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    AS->>TS: 24. Generate new opaque access token + refresh token
+    TS->>AS: 25. Store new token metadata
+    AS->>CA: 26. New opaque access_token + refresh_token
+    CA->>RS: 27. Retry API call with new token
+    RS->>CA: 28. Protected data`,
+
+                'B3': `sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over CA,RS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for development and simple integrations)
+
+    Note over CA: Simple token request
+    CA->>AS: 1. POST /token (grant_type=client_credentials)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+    AS->>CA: 2. access_token (short-lived, no refresh)
+    Note over CA: "access_token": "2YotnFZFEjr1zCsicMWpAA"<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"scope": "read write"
+    CA->>CA: 3. Cache token with expiry
+
+    Note over CA: API call process  
+    CA->>CA: 4. Check cached token
+    CA->>RS: 5. API call with Bearer token
+    Note over RS: Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+    RS->>RS: 6. Validate token (JWT) or introspect
+    Note over RS: Simple Token Validation<br/>• Check format<br/>• Verify with auth server if needed<br/>• Basic expiry check
+    RS->>CA: 7. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 8. API call with expired token
+    RS->>CA: 9. 401 Unauthorized
+    CA->>AS: 10. POST /token (grant_type=client_credentials)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+    AS->>CA: 11. New access_token
+    CA->>CA: 12. Cache new token
+    CA->>RS: 13. Retry API call with new token
+    RS->>CA: 14. Protected data
+
+    Note over CA: No refresh tokens used<br/>Simple request/response pattern<br/>Good for development environments`
             };
 
             document.getElementById('diagram-title').textContent = titles[patternCode] || 'OAuth2 Diagram';
