@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="patterns/overview.html" class="nav-link">All Patterns</a>
+                <a href="learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>OAuth2 Pattern Explorer</h1>
+            <p>Interactive guide to OAuth2 flows and implementation patterns</p>
+        </div>
+
+        <div class="main-content">
+            <div class="step-title">Welcome! Explore OAuth2 patterns and implementations</div>
+            <div class="step-description">
+                Learn about different OAuth2 flows, see sequence diagrams, and get implementation examples.
+                This comprehensive guide covers all major OAuth2 patterns with detailed explanations and real-world examples.
+            </div>
+
+            <div class="quick-start">
+                <a href="learn/basics.html" class="quick-card">
+                    <div class="option-icon">🎓</div>
+                    <div class="option-title">Learn Basics</div>
+                    <div class="option-description">Essential API security concepts and OAuth2 terminology</div>
+                </a>
+                
+                <a href="tools/decision.html" class="quick-card">
+                    <div class="option-icon">🤔</div>
+                    <div class="option-title">Decision Tree</div>
+                    <div class="option-description">Help me choose the right OAuth2 flow for my use case</div>
+                </a>
+                
+                <a href="patterns/overview.html" class="quick-card">
+                    <div class="option-icon">📊</div>
+                    <div class="option-title">Browse All Patterns</div>
+                    <div class="option-description">Explore OAuth2 patterns with detailed explanations and diagrams</div>
+                </a>
+                
+                <a href="learn/comparison.html" class="quick-card">
+                    <div class="option-icon">📖</div>
+                    <div class="option-title">Quick Guide</div>
+                    <div class="option-description">Simple explanations of when to use each OAuth2 flow</div>
+                </a>
+            </div>
+
+            <div class="feature-overview">
+                <h2>What You'll Learn</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <h3>👤 User Authentication Flows</h3>
+                        <p>Authorization Code flows for web apps, SPAs, mobile apps, and IoT devices. Learn when to use JWT vs Opaque tokens, PKCE security, and device authorization.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>🤖 Service-to-Service Flows</h3>
+                        <p>Client Credentials flows for microservices and API-to-API communication. Understand token caching, refresh strategies, and enterprise governance.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>🛡️ Security Best Practices</h3>
+                        <p>Learn about PKCE, token rotation, secure storage, and common security pitfalls. Understand the principle of least privilege and token lifecycle management.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>📋 Implementation Guidance</h3>
+                        <p>Detailed sequence diagrams, real code examples, and configuration guidance for popular frameworks and platforms.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="patterns-summary">
+                <h2>OAuth2 Patterns Covered</h2>
+                <div class="pattern-groups">
+                    <div class="pattern-group">
+                        <h3>Authorization Code Flows (A-Series)</h3>
+                        <ul>
+                            <li><strong>A1:</strong> High-performance web apps with JWT + Refresh</li>
+                            <li><strong>A2:</strong> Enterprise web apps with Opaque + Introspection</li>
+                            <li><strong>A3:</strong> SPAs and mobile apps with PKCE</li>
+                            <li><strong>A4:</strong> Device flow for IoT and smart TVs</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-group">
+                        <h3>Client Credentials Flows (B-Series)</h3>
+                        <ul>
+                            <li><strong>B1:</strong> High-performance microservices with JWT + Refresh</li>
+                            <li><strong>B2:</strong> Enterprise services with Opaque + Governance</li>
+                            <li><strong>B3:</strong> Simple development and prototyping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="getting-started">
+                <h2>Getting Started</h2>
+                <div class="start-steps">
+                    <div class="start-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Learn the Basics</h4>
+                            <p>Start with fundamental concepts like client types, token types, and grant flows.</p>
+                            <a href="learn/basics.html" class="btn btn-primary">Start Learning →</a>
+                        </div>
+                    </div>
+                    <div class="start-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Find Your Pattern</h4>
+                            <p>Use our decision tree to identify the best OAuth2 flow for your specific use case.</p>
+                            <a href="tools/decision.html" class="btn btn-primary">Decision Tree →</a>
+                        </div>
+                    </div>
+                    <div class="start-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>See It in Action</h4>
+                            <p>Explore detailed sequence diagrams and implementation examples.</p>
+                            <a href="patterns/overview.html" class="btn btn-primary">View Patterns →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="learn/basics.html">Documentation</a>
+                <a href="patterns/overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
