@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2: Authorization Code + Opaque + Introspection - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>A2: Authorization Code + Opaque + Introspection</h1>
+            <p>Enterprise web applications with centralized token control</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #f3e5f5; border-left: 4px solid #9C27B0; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #7B1FA2; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Enterprise systems requiring strict access control and immediate token revocation capabilities.
+                    This pattern prioritizes centralized control over performance.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #7B1FA2;">Client Type:</strong><br/>
+                        <span style="color: #666;">Confidential (Web Server)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Token Type:</strong><br/>
+                        <span style="color: #666;">Opaque + Refresh Token</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Use Case:</strong><br/>
+                        <span style="color: #666;">Enterprise Control Systems</span>
+                    </div>
+                    <div>
+                        <strong style="color: #7B1FA2;">Complexity:</strong><br/>
+                        <span style="color: #666;">High</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the Authorization Code flow with opaque tokens requiring introspection calls.
+                Note the trade-off: more network calls for centralized control and immediate revocation capabilities.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)  
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+    participant TS as Token Store/Database
+
+    Note over U,TS: OAuth2 Authorization Code Flow with Opaque Token<br/>(Best approach for Browser-hosted App for redirections)
+
+    U->>CA: 1. Click "Login" or access protected resource
+    CA->>U: 2. Redirect to Authorization Server
+    
+    Note over AS: GET https://auth.server.com/authorize?<br/>response_type=code&client_id=CLIENT_ID&<br/>redirect_uri=REDIRECT_URI&scope=SCOPE&<br/>state=RANDOM_STATE_VALUE
+    
+    U->>AS: 3. User authentication (username/password)
+    AS->>AS: 4. Show consent screen
+    AS->>U: 5. User grants consent
+    AS->>CA: 6. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 7. Browser app follows redirect with authorization code
+    CA->>AS: 8. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>TS: 9. Generate opaque access token
+    TS->>AS: 10. Store token metadata
+    AS->>CA: 11. Return opaque access token + refresh token
+    
+    Note over CA: "access_token": "by2wuC2mhteacqCMh8AgG4..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA"<br/>"scope": "read write"
+    
+    CA->>CA: 12. Store tokens securely
+    CA->>U: 13. Return protected resource
+    U->>CA: 14. API call with opaque token
+    CA->>AS: 15. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/introspect<br/>token=OPAQUE_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    
+    AS->>TS: 16. Lookup token metadata
+    TS->>AS: 17. Return token details
+    AS->>CA: 18. Token introspection response
+    
+    Note over CA: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"username": "jdoe"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"iat": 1419350238<br/>"sub": "Z5O3upPC88QrAjx00dis"<br/>"aud": "https://protected.example.net/resource"
+    
+    CA->>RS: 19. Request protected resource
+    RS->>AS: 20. Token introspection request
+    AS->>TS: 21. Lookup token metadata  
+    TS->>AS: 22. Return token details
+    AS->>RS: 23. Token introspection response
+    RS->>CA: 24. Return protected data
+    CA->>U: 25. Return API call result
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Immediate token revocation</li>
+                        <li>Centralized access control</li>
+                        <li>Real-time policy enforcement</li>
+                        <li>Detailed audit trails</li>
+                        <li>Fine-grained permissions</li>
+                        <li>Enterprise compliance ready</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Higher latency (introspection calls)</li>
+                        <li>Auth server becomes bottleneck</li>
+                        <li>More complex infrastructure</li>
+                        <li>Network dependency for validation</li>
+                        <li>Higher operational overhead</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Implement introspection caching</li>
+                        <li>Use circuit breakers for auth server</li>
+                        <li>Design for auth server high availability</li>
+                        <li>Monitor introspection performance</li>
+                        <li>Implement fallback strategies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🏢 Enterprise Benefits</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔍 Real-time Control</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Immediately revoke access, update permissions, and enforce policies without waiting for token expiration.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📊 Comprehensive Auditing</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Every token validation creates an audit trail, providing detailed access logs for compliance.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎛️ Dynamic Policies</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Update access policies in real-time without re-issuing tokens or restarting services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="a1.html" class="btn btn-secondary">← Previous: A1 (JWT + Refresh)</a>
+                <a href="a3.html" class="btn btn-primary">Next: A3 (PKCE) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
