@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B3: Client Credentials Simple - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>B3: Client Credentials Simple</h1>
+            <p>Simple service integrations with minimal complexity</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #F57C00; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Development environments and simple integrations where simplicity is prioritized over 
+                    advanced security features. This pattern provides basic OAuth2 compliance with minimal implementation overhead.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #F57C00;">Client Type:</strong><br/>
+                        <span style="color: #666;">Confidential (Service)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Token Type:</strong><br/>
+                        <span style="color: #666;">Simple (No Refresh)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Use Case:</strong><br/>
+                        <span style="color: #666;">Development & Prototyping</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Complexity:</strong><br/>
+                        <span style="color: #666;">Low</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the simplest OAuth2 Client Credentials flow without refresh tokens.
+                Each API call requires a fresh token request when the current token expires.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over CA,RS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for development and simple integrations)
+
+    Note over CA: Simple token request
+    CA->>AS: 1. POST /token (grant_type=client_credentials)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+    AS->>CA: 2. access_token (short-lived, no refresh)
+    Note over CA: "access_token": "2YotnFZFEjr1zCsicMWpAA"<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"scope": "read write"
+    CA->>CA: 3. Cache token with expiry
+
+    Note over CA: API call process  
+    CA->>CA: 4. Check cached token
+    CA->>RS: 5. API call with Bearer token
+    Note over RS: Authorization: Bearer 2YotnFZFEjr1zCsicMWpAA
+    RS->>RS: 6. Validate token (JWT) or introspect
+    Note over RS: Simple Token Validation<br/>• Check format<br/>• Verify with auth server if needed<br/>• Basic expiry check
+    RS->>CA: 7. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 8. API call with expired token
+    RS->>CA: 9. 401 Unauthorized
+    CA->>AS: 10. POST /token (grant_type=client_credentials)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+    AS->>CA: 11. New access_token
+    CA->>CA: 12. Cache new token
+    CA->>RS: 13. Retry API call with new token
+    RS->>CA: 14. Protected data
+
+    Note over CA: No refresh tokens used<br/>Simple request/response pattern<br/>Good for development environments
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Extremely simple to implement</li>
+                        <li>Quick to prototype and test</li>
+                        <li>Minimal code complexity</li>
+                        <li>Easy to debug and troubleshoot</li>
+                        <li>Low operational overhead</li>
+                        <li>Perfect for learning OAuth2</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>No refresh tokens (less secure)</li>
+                        <li>More frequent auth server calls</li>
+                        <li>Higher coupling to auth server</li>
+                        <li>Limited scalability for high volume</li>
+                        <li>Not suitable for production at scale</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Cache tokens with expiry times</li>
+                        <li>Implement simple retry logic</li>
+                        <li>Use in-memory token storage</li>
+                        <li>Handle 401 responses gracefully</li>
+                        <li>Monitor token request frequency</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🚀 Perfect For Getting Started</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🧪 Prototyping</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Quickly validate integration concepts without complex token management infrastructure.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📚 Learning</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Understand OAuth2 fundamentals before implementing more complex patterns with refresh tokens.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔧 Development</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Local development environments where simplicity and fast iteration are more important than production features.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">📝 Implementation Example</h3>
+                <div style="background: #2d3748; color: #e2e8f0; padding: 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto;">
+// Simple Client Credentials Implementation
+class SimpleOAuth2Client {
+    constructor(clientId, clientSecret, tokenUrl) {
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+        this.tokenUrl = tokenUrl;
+        this.cachedToken = null;
+        this.tokenExpiry = null;
+    }
+
+    async getAccessToken() {
+        // Check if cached token is still valid
+        if (this.cachedToken && this.tokenExpiry > Date.now()) {
+            return this.cachedToken;
+        }
+
+        // Request new token
+        const response = await fetch(this.tokenUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                grant_type: 'client_credentials',
+                client_id: this.clientId,
+                client_secret: this.clientSecret,
+                scope: 'api:read api:write'
+            })
+        });
+
+        const tokenData = await response.json();
+        
+        // Cache the token
+        this.cachedToken = tokenData.access_token;
+        this.tokenExpiry = Date.now() + (tokenData.expires_in * 1000) - 60000; // 1 min buffer
+        
+        return this.cachedToken;
+    }
+
+    async callAPI(url) {
+        const token = await this.getAccessToken();
+        
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.status === 401) {
+            // Token expired, clear cache and retry
+            this.cachedToken = null;
+            const newToken = await this.getAccessToken();
+            
+            return fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${newToken}`
+                }
+            });
+        }
+
+        return response;
+    }
+}
+                </div>
+            </div>
+
+            <div style="background: #fff3e0; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #F57C00; margin-bottom: 20px;">🎯 When to Use B3 vs Other Patterns</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">✅ Choose B3 When</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Building prototypes or proof-of-concepts</li>
+                            <li>Learning OAuth2 implementation</li>
+                            <li>Local development environments</li>
+                            <li>Low-volume integrations</li>
+                            <li>Simplicity is the top priority</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⬆️ Upgrade to B1/B2 When</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Moving to production environments</li>
+                            <li>High-volume API calls expected</li>
+                            <li>Security requirements increase</li>
+                            <li>Need token rotation capabilities</li>
+                            <li>Enterprise compliance required</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔄 Migration Path</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Start with B3 for initial development</li>
+                            <li>Add refresh tokens → upgrade to B1</li>
+                            <li>Add governance needs → upgrade to B2</li>
+                            <li>Gradual complexity increase</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e8; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #2E7D32; margin-bottom: 20px;">🛠️ Best Practices for B3</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⚡ Performance</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Cache tokens aggressively with proper expiry checking to minimize auth server calls.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔒 Security</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Store client secrets securely even in development. Never commit secrets to version control.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📊 Monitoring</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Log token requests and API calls for debugging. Monitor for excessive token requests.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔄 Error Handling</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Implement retry logic for network failures and handle token expiry gracefully.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="b2.html" class="btn btn-secondary">← Previous: B2 (Opaque + Refresh)</a>
+                <a href="overview.html" class="btn btn-primary">Back to All Patterns</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
