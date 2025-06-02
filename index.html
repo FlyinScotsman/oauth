@@ -101,83 +101,6 @@
             opacity: 0.8;
         }
 
-        .patterns-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .pattern-card {
-            border: 2px solid #e0e8ff;
-            border-radius: 15px;
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
-            transition: all 0.3s ease;
-        }
-
-        .pattern-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
-        }
-
-        .pattern-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .pattern-code-badge {
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-
-        .pattern-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .pattern-description {
-            color: #666;
-            margin: 15px 0;
-            line-height: 1.5;
-        }
-
-        .pattern-use-case {
-            color: #666;
-            margin: 15px 0;
-            font-style: italic;
-        }
-
-        .pattern-meta {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            flex-wrap: wrap;
-        }
-
-        .meta-tag {
-            background: #e8f0ff;
-            color: #667eea;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-        }
-
-        .recommended-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            margin-left: 10px;
-        }
-
         .btn {
             padding: 12px 25px;
             border: none;
@@ -221,34 +144,6 @@
             display: none;
         }
 
-        .diagram-container {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .mermaid-diagram {
-            min-height: 400px;
-            text-align: center;
-        }
-
-        .code-example {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
         .decision-tree {
             background: #f8f9fa;
             border-radius: 15px;
@@ -262,19 +157,13 @@
             border-radius: 10px;
             padding: 20px;
             margin: 15px 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .decision-step:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
         }
 
         .decision-question {
             font-weight: bold;
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
         }
 
         .decision-options {
@@ -287,37 +176,101 @@
             background: #667eea;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
         .decision-btn:hover {
             background: #5a67d8;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+        }
+
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .pattern-card {
+            border: 2px solid #e0e8ff;
+            border-radius: 15px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .pattern-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pattern-code-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .pattern-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .recommended-badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+
+        .diagram-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
         }
 
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
             }
-
             .header h1 {
                 font-size: 2rem;
             }
-
             .main-content {
                 padding: 20px;
             }
-
             .patterns-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .nav-buttons {
-                flex-direction: column;
             }
         }
     </style>
@@ -338,6 +291,11 @@
                 </div>
 
                 <div class="quick-start">
+                    <div class="quick-card" onclick="showLearning()">
+                        <div class="option-icon">🎓</div>
+                        <div class="option-title">Learn Basics</div>
+                        <div class="option-description">Essential API security concepts and OAuth2 terminology</div>
+                    </div>
                     <div class="quick-card" onclick="showDecisionTree()">
                         <div class="option-icon">🤔</div>
                         <div class="option-title">Decision Tree</div>
@@ -353,11 +311,49 @@
                         <div class="option-title">Quick Guide</div>
                         <div class="option-description">Simple explanations of when to use each OAuth2 flow</div>
                     </div>
-                    <div class="quick-card" onclick="showCodeExamples()">
-                        <div class="option-icon">💻</div>
-                        <div class="option-title">Code Examples</div>
-                        <div class="option-description">Real implementation examples for different frameworks</div>
+                </div>
+            </div>
+
+            <!-- Learning Screen -->
+            <div id="learning-screen" class="hidden">
+                <div class="step-title">API Security Fundamentals</div>
+                <div class="step-description">
+                    Essential concepts and terminology for understanding OAuth2 and API security.
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 20px; border-radius: 8px;">
+                        <h3 style="color: #1976D2; margin-bottom: 15px;">🔐 Client Types</h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #333;">Confidential Client</h4>
+                            <p style="color: #666; margin: 8px 0;">Can securely store credentials (client secret). Examples: web servers, backend services.</p>
+                        </div>
+
+                        <div>
+                            <h4 style="color: #333;">Public Client</h4>
+                            <p style="color: #666; margin: 8px 0;">Cannot securely store credentials. Examples: SPAs, mobile apps, desktop apps.</p>
+                        </div>
                     </div>
+
+                    <div style="background: #f3e5f5; border-left: 4px solid #9C27B0; padding: 20px; border-radius: 8px;">
+                        <h3 style="color: #7B1FA2; margin-bottom: 15px;">🎫 Token Types</h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #333;">JWT (JSON Web Token)</h4>
+                            <p style="color: #666; margin: 8px 0;">Self-contained tokens that can be validated without calling the auth server.</p>
+                        </div>
+
+                        <div>
+                            <h4 style="color: #333;">Opaque Token</h4>
+                            <p style="color: #666; margin: 8px 0;">Random strings that require introspection calls to validate.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="goHome()">← Back to Home</button>
+                    <button class="btn btn-primary" onclick="showDecisionTree()">Ready to Choose a Flow →</button>
                 </div>
             </div>
 
@@ -370,16 +366,7 @@
 
                 <div class="decision-tree">
                     <div id="decision-content">
-                        <div class="decision-step">
-                            <div class="decision-question">What type of application are you building?</div>
-                            <div class="decision-options">
-                                <button class="decision-btn" onclick="decisionStep('web-app')">Web Application (server-side)</button>
-                                <button class="decision-btn" onclick="decisionStep('spa')">Single Page App (SPA)</button>
-                                <button class="decision-btn" onclick="decisionStep('mobile')">Mobile App</button>
-                                <button class="decision-btn" onclick="decisionStep('service')">Service/API (no user)</button>
-                                <button class="decision-btn" onclick="decisionStep('device')">Device/IoT</button>
-                            </div>
-                        </div>
+                        <!-- Content will be populated by JavaScript -->
                     </div>
                 </div>
 
@@ -402,34 +389,9 @@
                             <span class="pattern-code-badge">A1</span>
                             <div class="pattern-title">Authorization Code + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <div class="pattern-description">High-performance web applications with secure token rotation</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Traditional web apps requiring fast API responses</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">web-app</span>
-                            <span class="meta-tag">jwt</span>
-                            <span class="meta-tag">refresh-tokens</span>
-                        </div>
-                        <div>
+                        <p>High-performance web applications with secure token rotation</p>
+                        <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('A1')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('A1')">Implementation</button>
-                        </div>
-                    </div>
-
-                    <div class="pattern-card">
-                        <div class="pattern-header">
-                            <span class="pattern-code-badge">A2</span>
-                            <div class="pattern-title">Authorization Code + Opaque + Introspection<span class="recommended-badge">RECOMMENDED</span></div>
-                        </div>
-                        <div class="pattern-description">Enterprise web applications with centralized token control</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Enterprise systems requiring strict access control</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">web-app</span>
-                            <span class="meta-tag">opaque</span>
-                            <span class="meta-tag">enterprise</span>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="showDiagram('A2')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('A2')">Implementation</button>
                         </div>
                     </div>
 
@@ -438,34 +400,9 @@
                             <span class="pattern-code-badge">A3</span>
                             <div class="pattern-title">Authorization Code + PKCE + JWT<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <div class="pattern-description">Single Page Apps and mobile applications</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Modern SPAs and mobile applications</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">spa</span>
-                            <span class="meta-tag">mobile</span>
-                            <span class="meta-tag">pkce</span>
-                        </div>
-                        <div>
+                        <p>Single Page Apps and mobile applications</p>
+                        <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('A3')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('A3')">Implementation</button>
-                        </div>
-                    </div>
-
-                    <div class="pattern-card">
-                        <div class="pattern-header">
-                            <span class="pattern-code-badge">A4</span>
-                            <div class="pattern-title">Device Authorization Flow<span class="recommended-badge">RECOMMENDED</span></div>
-                        </div>
-                        <div class="pattern-description">Devices without browsers or limited input capabilities</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Smart TVs, IoT devices, CLI tools</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">device</span>
-                            <span class="meta-tag">iot</span>
-                            <span class="meta-tag">smart-tv</span>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="showDiagram('A4')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('A4')">Implementation</button>
                         </div>
                     </div>
 
@@ -474,52 +411,9 @@
                             <span class="pattern-code-badge">B1</span>
                             <div class="pattern-title">Client Credentials + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <div class="pattern-description">Enterprise microservices with token rotation</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Production microservice architectures</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">microservices</span>
-                            <span class="meta-tag">jwt</span>
-                            <span class="meta-tag">enterprise</span>
-                        </div>
-                        <div>
+                        <p>Enterprise microservices with token rotation</p>
+                        <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('B1')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('B1')">Implementation</button>
-                        </div>
-                    </div>
-
-                    <div class="pattern-card">
-                        <div class="pattern-header">
-                            <span class="pattern-code-badge">B2</span>
-                            <div class="pattern-title">Client Credentials + Opaque + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
-                        </div>
-                        <div class="pattern-description">Enterprise services with centralized token control</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Enterprise systems requiring governance</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">enterprise</span>
-                            <span class="meta-tag">opaque</span>
-                            <span class="meta-tag">audit</span>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="showDiagram('B2')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('B2')">Implementation</button>
-                        </div>
-                    </div>
-
-                    <div class="pattern-card">
-                        <div class="pattern-header">
-                            <span class="pattern-code-badge">B3</span>
-                            <div class="pattern-title">Client Credentials Simple (No Refresh)</div>
-                        </div>
-                        <div class="pattern-description">Simple service integrations with minimal complexity</div>
-                        <div class="pattern-use-case"><strong>Best for:</strong> Development environments and simple integrations</div>
-                        <div class="pattern-meta">
-                            <span class="meta-tag">simple</span>
-                            <span class="meta-tag">prototype</span>
-                            <span class="meta-tag">development</span>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary" onclick="showDiagram('B3')">View Diagram</button>
-                            <button class="btn btn-secondary" onclick="showImplementation('B3')">Implementation</button>
                         </div>
                     </div>
                 </div>
@@ -529,7 +423,7 @@
                 </div>
             </div>
 
-            <!-- Diagram Viewer -->
+            <!-- Diagram Screen -->
             <div id="diagram-screen" class="hidden">
                 <div class="step-title" id="diagram-title">OAuth2 Sequence Diagram</div>
                 <div class="step-description" id="diagram-description">
@@ -537,26 +431,9 @@
                 </div>
 
                 <div class="diagram-container">
-                    <div id="mermaid-diagram" class="mermaid-diagram">
+                    <div id="mermaid-diagram" style="min-height: 400px; text-align: center;">
                         <p>Loading diagram...</p>
                     </div>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
-                    <button class="btn btn-primary" onclick="copyDiagramText()">Copy Mermaid Code</button>
-                </div>
-            </div>
-
-            <!-- Implementation Screen -->
-            <div id="implementation-screen" class="hidden">
-                <div class="step-title" id="impl-title">Implementation Examples</div>
-                <div class="step-description" id="impl-description">
-                    Real-world code examples and implementation guidance.
-                </div>
-
-                <div id="implementation-content">
-                    <p>Implementation examples will be displayed here.</p>
                 </div>
 
                 <div class="nav-buttons">
@@ -600,32 +477,6 @@
                     <button class="btn btn-primary" onclick="showPatterns()">View All Patterns →</button>
                 </div>
             </div>
-
-            <!-- Code Examples Screen -->
-            <div id="code-screen" class="hidden">
-                <div class="step-title">Implementation Examples</div>
-                <div class="step-description">
-                    Real code examples for different frameworks and patterns.
-                </div>
-
-                <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin: 20px 0;">
-                    <h3>Available Examples</h3>
-                    <div style="margin: 20px 0;">
-                        <button class="btn btn-primary" onclick="showCodeExample('nodejs-a1')">Node.js + Authorization Code</button>
-                        <button class="btn btn-primary" onclick="showCodeExample('react-a3')">React SPA + PKCE</button>
-                        <button class="btn btn-primary" onclick="showCodeExample('dotnet-b1')">.NET + Client Credentials</button>
-                        <button class="btn btn-primary" onclick="showCodeExample('java-b1')">Java + Microservices</button>
-                    </div>
-
-                    <div id="code-example-content">
-                        <p>Select an example above to see implementation details.</p>
-                    </div>
-                </div>
-
-                <div class="nav-buttons">
-                    <button class="btn btn-secondary" onclick="goHome()">← Back to Home</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -657,6 +508,13 @@
             currentScreen = 'patterns-screen';
         }
 
+        function showLearning() {
+            hideAllScreens();
+            document.getElementById('learning-screen').classList.remove('hidden');
+            lastScreen = currentScreen;
+            currentScreen = 'learning-screen';
+        }
+
         function showDecisionTree() {
             hideAllScreens();
             document.getElementById('decision-screen').classList.remove('hidden');
@@ -672,13 +530,6 @@
             currentScreen = 'guide-screen';
         }
 
-        function showCodeExamples() {
-            hideAllScreens();
-            document.getElementById('code-screen').classList.remove('hidden');
-            lastScreen = currentScreen;
-            currentScreen = 'code-screen';
-        }
-
         function goBack() {
             hideAllScreens();
             document.getElementById(lastScreen).classList.remove('hidden');
@@ -686,7 +537,7 @@
         }
 
         function hideAllScreens() {
-            const screens = ['home-screen', 'patterns-screen', 'diagram-screen', 'implementation-screen', 'guide-screen', 'code-screen', 'decision-screen'];
+            const screens = ['home-screen', 'patterns-screen', 'diagram-screen', 'learning-screen', 'guide-screen', 'decision-screen'];
             screens.forEach(function(screenId) {
                 const element = document.getElementById(screenId);
                 if (element) {
@@ -699,15 +550,7 @@
         function resetDecisionTree() {
             decisionPath = [];
             const content = document.getElementById('decision-content');
-            content.innerHTML = `
-                <div class="decision-step">
-                    <div class="decision-question">Does your application involve user authentication?</div>
-                    <div class="decision-options">
-                        <button class="decision-btn" onclick="decisionStep('user-auth')">👤 Yes - Users need to log in</button>
-                        <button class="decision-btn" onclick="decisionStep('service-auth')">🤖 No - Service-to-service only</button>
-                    </div>
-                </div>
-            `;
+            content.innerHTML = '<div class="decision-step"><div class="decision-question">Does your application involve user authentication?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'user-auth\')">👤 Yes - Users need to log in</button><button class="decision-btn" onclick="decisionStep(\'service-auth\')">🤖 No - Service-to-service only</button></div></div>';
         }
 
         function decisionStep(choice) {
@@ -715,114 +558,26 @@
             const content = document.getElementById('decision-content');
             
             if (choice === 'user-auth') {
-                // User authentication flows (Authorization Code variants)
-                content.innerHTML = `
-                    <div class="decision-step">
-                        <div class="decision-question">What type of application are you building?</div>
-                        <div class="decision-options">
-                            <button class="decision-btn" onclick="decisionStep('web-app')">🌐 Web Application (server-side)</button>
-                            <button class="decision-btn" onclick="decisionStep('spa')">📱 Single Page App (SPA)</button>
-                            <button class="decision-btn" onclick="decisionStep('mobile')">📲 Mobile App</button>
-                            <button class="decision-btn" onclick="decisionStep('device')">📺 Device/IoT (limited input)</button>
-                        </div>
-                    </div>
-                `;
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What type of application are you building?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'web-app\')">🌐 Web Application</button><button class="decision-btn" onclick="recommendPattern(\'A3\')">📱 SPA/Mobile App</button></div></div>';
             } else if (choice === 'service-auth') {
-                // Service-to-service flows (Client Credentials variants)
-                content.innerHTML = `
-                    <div class="decision-step">
-                        <div class="decision-question">What's your deployment environment?</div>
-                        <div class="decision-options">
-                            <button class="decision-btn" onclick="decisionStep('production')">🏭 Production / Enterprise</button>
-                            <button class="decision-btn" onclick="recommendPattern('B3')">🧪 Development / Simple integration</button>
-                        </div>
-                    </div>
-                `;
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is your environment?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'B1\')">🏭 Production</button><button class="decision-btn" onclick="recommendPattern(\'B3\')">🧪 Development</button></div></div>';
             } else if (choice === 'web-app') {
-                content.innerHTML = `
-                    <div class="decision-step">
-                        <div class="decision-question">What are your main requirements?</div>
-                        <div class="decision-options">
-                            <button class="decision-btn" onclick="recommendPattern('A1')">⚡ High Performance / Fast API calls</button>
-                            <button class="decision-btn" onclick="recommendPattern('A2')">🔒 Strict Security / Immediate token revocation</button>
-                        </div>
-                    </div>
-                `;
-            } else if (choice === 'spa' || choice === 'mobile') {
-                recommendPattern('A3');
-            } else if (choice === 'device') {
-                recommendPattern('A4');
-            } else if (choice === 'production') {
-                content.innerHTML = `
-                    <div class="decision-step">
-                        <div class="decision-question">What's more important for your services?</div>
-                        <div class="decision-options">
-                            <button class="decision-btn" onclick="recommendPattern('B1')">⚡ Performance / High availability</button>
-                            <button class="decision-btn" onclick="recommendPattern('B2')">🔍 Control / Audit requirements</button>
-                        </div>
-                    </div>
-                `;
+                recommendPattern('A1');
             }
         }
 
         function recommendPattern(pattern) {
             const patterns = {
-                'A1': {
-                    title: 'Authorization Code + JWT + Refresh',
-                    description: 'Perfect for high-performance web applications that need fast API responses.',
-                    reasons: ['JWT tokens for fast validation', 'Refresh tokens for security', 'Server-side confidential client']
-                },
-                'A2': {
-                    title: 'Authorization Code + Opaque + Introspection',
-                    description: 'Ideal for enterprise applications requiring strict token control.',
-                    reasons: ['Immediate token revocation', 'Centralized control', 'Enterprise audit compliance']
-                },
-                'A3': {
-                    title: 'Authorization Code + PKCE + JWT',
-                    description: 'The standard for SPAs and mobile apps with PKCE security.',
-                    reasons: ['PKCE prevents code interception', 'Public client support', 'Modern best practice']
-                },
-                'A4': {
-                    title: 'Device Authorization Flow',
-                    description: 'Designed for devices without browsers or limited input.',
-                    reasons: ['No browser required', 'User authenticates on separate device', 'Perfect for IoT/TV apps']
-                },
-                'B1': {
-                    title: 'Client Credentials + JWT + Refresh',
-                    description: 'High-performance service-to-service communication.',
-                    reasons: ['Fast JWT validation', 'Background token refresh', 'High availability design']
-                },
-                'B2': {
-                    title: 'Client Credentials + Opaque + Refresh',
-                    description: 'Enterprise service communication with strict governance.',
-                    reasons: ['Centralized token control', 'Audit trail support', 'Immediate revocation']
-                },
-                'B3': {
-                    title: 'Client Credentials Simple',
-                    description: 'Simple service integration for development or basic needs.',
-                    reasons: ['Minimal complexity', 'Quick to implement', 'Good for prototyping']
-                }
+                'A1': { title: 'Authorization Code + JWT + Refresh', description: 'Perfect for high-performance web applications.' },
+                'A3': { title: 'Authorization Code + PKCE + JWT', description: 'The standard for SPAs and mobile apps.' },
+                'B1': { title: 'Client Credentials + JWT + Refresh', description: 'High-performance service-to-service communication.' },
+                'B3': { title: 'Client Credentials Simple', description: 'Simple service integration for development.' }
             };
 
             const p = patterns[pattern];
             const content = document.getElementById('decision-content');
-            content.innerHTML = `
-                <div style="background: #e8f5e8; border: 2px solid #4CAF50; border-radius: 15px; padding: 25px; text-align: center;">
-                    <h3 style="color: #2e7d32; margin-bottom: 15px;">✅ Recommended Pattern: ${pattern}</h3>
-                    <h4 style="color: #333; margin-bottom: 10px;">${p.title}</h4>
-                    <p style="color: #666; margin-bottom: 20px;">${p.description}</p>
-                    <div style="text-align: left; margin: 20px 0;">
-                        <strong>Why this pattern:</strong>
-                        <ul style="margin: 10px 0; padding-left: 20px;">
-                            ${p.reasons.map(reason => `<li>${reason}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <button class="btn btn-primary" onclick="showDiagram('${pattern}')">View Diagram</button>
-                        <button class="btn btn-secondary" onclick="showImplementation('${pattern}')">See Implementation</button>
-                    </div>
-                </div>
-            `;
+            
+            content.innerHTML = '<div style="background: #e8f5e8; border: 2px solid #4CAF50; border-radius: 15px; padding: 25px; text-align: center;"><h3 style="color: #2e7d32; margin-bottom: 15px;">✅ Recommended Pattern: ' + pattern + '</h3><h4 style="color: #333; margin-bottom: 10px;">' + p.title + '</h4><p style="color: #666; margin-bottom: 20px;">' + p.description + '</p><div style="margin-top: 20px;"><button class="btn btn-primary" onclick="showDiagram(\'' + pattern + '\')">View Diagram</button></div></div>';
         }
 
         // Diagram functions
@@ -838,210 +593,18 @@
         function loadDiagramContent(patternCode) {
             const titles = {
                 'A1': 'A1: Authorization Code + JWT + Refresh Tokens',
-                'A2': 'A2: Authorization Code + Opaque + Introspection', 
                 'A3': 'A3: Authorization Code + PKCE + JWT',
-                'A4': 'A4: Device Authorization Flow',
-                'B1': 'B1: Client Credentials + JWT + Refresh Tokens',
-                'B2': 'B2: Client Credentials + Opaque + Refresh Tokens',
-                'B3': 'B3: Client Credentials Simple (No Refresh)'
-            };
-
-            const descriptions = {
-                'A1': 'High-performance web applications with secure token rotation',
-                'A2': 'Enterprise web applications with centralized token control',
-                'A3': 'Single Page Apps and mobile applications', 
-                'A4': 'Devices without browsers or limited input capabilities',
-                'B1': 'Enterprise microservices with token rotation',
-                'B2': 'Enterprise services with centralized token control',
-                'B3': 'Simple service integrations with minimal complexity'
+                'B1': 'B1: Client Credentials + JWT + Refresh Tokens'
             };
 
             const diagrams = {
-                'A1': `sequenceDiagram
-    participant U as User
-    participant B as Browser
-    participant A as Web App
-    participant AS as Auth Server
-    participant API as Resource API
-
-    U->>B: Access protected resource
-    B->>A: Request page
-    A->>A: Check session
-    A->>B: Redirect to /authorize
-    B->>AS: GET /authorize?response_type=code&client_id=...
-    AS->>U: Show login form
-    U->>AS: Username/password
-    AS->>B: Redirect with auth code
-    B->>A: GET /callback?code=abc123
-    A->>AS: POST /token (code + client_secret)
-    AS->>A: JWT access_token + refresh_token
-    A->>A: Store tokens securely
-    A->>B: Set session cookie
-    B->>A: API request with session
-    A->>API: API call with JWT
-    API->>API: Validate JWT locally
-    API->>A: Protected data
-    A->>B: Render page with data`,
-                'A2': `sequenceDiagram
-    participant U as User
-    participant B as Browser
-    participant A as Web App
-    participant AS as Auth Server
-    participant API as Resource API
-
-    U->>B: Access protected resource
-    B->>A: Request page
-    A->>A: Check session
-    A->>B: Redirect to /authorize
-    B->>AS: GET /authorize?response_type=code&client_id=...
-    AS->>U: Show login form
-    U->>AS: Username/password
-    AS->>B: Redirect with auth code
-    B->>A: GET /callback?code=abc123
-    A->>AS: POST /token (code + client_secret)
-    AS->>A: Opaque access_token + refresh_token
-    A->>A: Store tokens securely
-    A->>B: Set session cookie
-    B->>A: API request with session
-    A->>AS: POST /introspect (token)
-    AS->>A: Token metadata + validity
-    A->>API: API call with opaque token
-    API->>AS: POST /introspect (token)
-    AS->>API: Token metadata + validity
-    API->>A: Protected data
-    A->>B: Render page with data`,
-                'A3': `sequenceDiagram
-    participant U as User
-    participant SPA as Single Page App
-    participant AS as Auth Server
-    participant API as Resource API
-
-    SPA->>SPA: Generate code_verifier & code_challenge
-    U->>SPA: Click login
-    SPA->>U: Redirect to Auth Server
-    U->>AS: GET /authorize?response_type=code&client_id=...&code_challenge=...
-    AS->>U: Show login form
-    U->>AS: Username/password
-    AS->>SPA: Redirect with auth code
-    SPA->>AS: POST /token (code + code_verifier)
-    AS->>AS: Verify code_challenge
-    AS->>SPA: JWT access_token + refresh_token
-    SPA->>SPA: Store tokens in memory
-    U->>SPA: Access protected feature
-    SPA->>API: API call with JWT Bearer token
-    API->>API: Validate JWT locally
-    API->>SPA: Protected data
-    SPA->>U: Display data`,
-                'A4': `sequenceDiagram
-    participant D as Device
-    participant U as User
-    participant B as User's Browser
-    participant AS as Auth Server
-    participant API as Resource API
-
-    D->>AS: POST /device_authorization
-    AS->>D: device_code + user_code + verification_uri
-    D->>U: Display: "Go to verification_uri, enter user_code"
-    U->>B: Navigate to verification_uri
-    B->>AS: GET verification_uri
-    AS->>U: Enter user_code form
-    U->>AS: Submit user_code
-    AS->>U: Show login form
-    U->>AS: Username/password
-    AS->>B: Device authorization complete
-    
-    loop Polling
-        D->>AS: POST /token (device_code)
-        AS->>D: authorization_pending OR access_token
-    end
-    
-    AS->>D: JWT access_token + refresh_token
-    D->>API: API call with JWT Bearer token
-    API->>API: Validate JWT locally
-    API->>D: Protected data`,
-                'B1': `sequenceDiagram
-    participant S1 as Service A
-    participant AS as Auth Server
-    participant S2 as Service B
-
-    Note over S1: Background refresh process
-    loop Every 45 minutes
-        S1->>AS: POST /token (client_credentials + refresh_token)
-        AS->>S1: New JWT access_token + refresh_token
-        S1->>S1: Cache new tokens
-    end
-
-    Note over S1: API call process
-    S1->>S1: Get cached JWT
-    S1->>S2: API call with JWT Bearer token
-    S2->>S2: Validate JWT locally (fast)
-    S2->>S1: Protected data
-
-    Note over S1: Token expiry handling
-    S1->>S2: API call with expired JWT
-    S2->>S1: 401 Unauthorized
-    S1->>AS: POST /token (client_credentials + refresh_token)
-    AS->>S1: New JWT access_token + refresh_token
-    S1->>S2: Retry API call with new JWT
-    S2->>S1: Protected data`,
-                'B2': `sequenceDiagram
-    participant S1 as Service A
-    participant AS as Auth Server
-    participant S2 as Service B
-
-    Note over S1: Background refresh process
-    loop Every 45 minutes
-        S1->>AS: POST /token (client_credentials + refresh_token)
-        AS->>S1: New opaque access_token + refresh_token
-        S1->>S1: Cache new tokens
-    end
-
-    Note over S1: API call process
-    S1->>S1: Get cached token
-    S1->>AS: POST /introspect (token)
-    AS->>S1: Token validity + metadata
-    S1->>S2: API call with opaque Bearer token
-    S2->>AS: POST /introspect (token)
-    AS->>S2: Token validity + metadata
-    S2->>S1: Protected data
-
-    Note over S1: Token expiry handling
-    S1->>S2: API call with expired token
-    S2->>AS: POST /introspect (token)
-    AS->>S2: Token invalid/expired
-    S2->>S1: 401 Unauthorized
-    S1->>AS: POST /token (client_credentials + refresh_token)
-    AS->>S1: New opaque access_token + refresh_token
-    S1->>S2: Retry API call with new token
-    S2->>S1: Protected data`,
-                'B3': `sequenceDiagram
-    participant S1 as Service A
-    participant AS as Auth Server
-    participant S2 as Service B
-
-    Note over S1: Simple token request
-    S1->>AS: POST /token (grant_type=client_credentials)
-    AS->>S1: access_token (short-lived, no refresh)
-    S1->>S1: Cache token with expiry
-
-    Note over S1: API call process
-    S1->>S1: Check cached token
-    S1->>S2: API call with Bearer token
-    S2->>S2: Validate token (JWT) or introspect
-    S2->>S1: Protected data
-
-    Note over S1: Token expiry handling
-    S1->>S2: API call with expired token
-    S2->>S1: 401 Unauthorized
-    S1->>AS: POST /token (grant_type=client_credentials)
-    AS->>S1: New access_token
-    S1->>S1: Cache new token
-    S1->>S2: Retry API call with new token
-    S2->>S1: Protected data`
+                'A1': 'sequenceDiagram\n    participant U as User\n    participant B as Browser\n    participant A as Web App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    U->>B: Access protected resource\n    B->>A: Request page\n    A->>A: Check session\n    A->>B: Redirect to /authorize\n    B->>AS: GET /authorize\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>B: Redirect with auth code\n    B->>A: GET /callback?code=abc123\n    A->>AS: POST /token\n    AS->>A: JWT access_token + refresh_token\n    A->>API: API call with JWT\n    API->>A: Protected data',
+                'A3': 'sequenceDiagram\n    participant U as User\n    participant SPA as Single Page App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    SPA->>SPA: Generate PKCE challenge\n    U->>SPA: Click login\n    SPA->>AS: Redirect with code_challenge\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>SPA: Redirect with auth code\n    SPA->>AS: POST /token with code_verifier\n    AS->>SPA: JWT access_token\n    SPA->>API: API call with JWT\n    API->>SPA: Protected data',
+                'B1': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: JWT access_token + refresh_token\n    S1->>S2: API call with JWT\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New JWT tokens'
             };
 
             document.getElementById('diagram-title').textContent = titles[patternCode] || 'OAuth2 Diagram';
-            document.getElementById('diagram-description').textContent = descriptions[patternCode] || 'OAuth2 sequence diagram';
+            document.getElementById('diagram-description').textContent = 'OAuth2 sequence diagram for ' + patternCode;
 
             const diagramElement = document.getElementById('mermaid-diagram');
             currentDiagramCode = diagrams[patternCode] || '';
@@ -1052,651 +615,10 @@
                     mermaid.init(undefined, diagramElement.querySelector('.mermaid'));
                 } catch (error) {
                     console.error('Mermaid rendering error:', error);
-                    diagramElement.innerHTML = '<div style="padding: 40px; text-align: center; color: #666; border: 2px dashed #ddd; border-radius: 10px;"><h3>Diagram Loading Error</h3><p>There was an issue rendering the Mermaid diagram.</p><p>Pattern: ' + patternCode + '</p></div>';
+                    diagramElement.innerHTML = '<div style="padding: 40px; text-align: center; color: #666;">Error rendering diagram</div>';
                 }
             } else {
-                diagramElement.innerHTML = '<div style="padding: 40px; text-align: center; color: #666;">Diagram not available for this pattern.</div>';
-            }
-        }
-
-        function copyDiagramText() {
-            if (currentDiagramCode) {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(currentDiagramCode).then(function() {
-                        alert('Mermaid diagram code copied to clipboard!');
-                    }).catch(function() {
-                        alert('Copy failed. Please copy manually:\n\n' + currentDiagramCode);
-                    });
-                } else {
-                    alert('Copy failed. Please copy manually:\n\n' + currentDiagramCode);
-                }
-            } else {
-                alert('No diagram code available to copy.');
-            }
-        }
-
-        // Implementation functions
-        function showImplementation(patternCode) {
-            hideAllScreens();
-            document.getElementById('implementation-screen').classList.remove('hidden');
-            lastScreen = currentScreen;
-            currentScreen = 'implementation-screen';
-            
-            loadImplementationContent(patternCode);
-        }
-
-        function loadImplementationContent(patternCode) {
-            const titles = {
-                'A1': 'A1: Authorization Code + JWT + Refresh - Implementation',
-                'A2': 'A2: Authorization Code + Opaque + Introspection - Implementation',
-                'A3': 'A3: Authorization Code + PKCE + JWT - Implementation',
-                'A4': 'A4: Device Authorization Flow - Implementation',
-                'B1': 'B1: Client Credentials + JWT + Refresh - Implementation',
-                'B2': 'B2: Client Credentials + Opaque + Refresh - Implementation',
-                'B3': 'B3: Client Credentials Simple - Implementation'
-            };
-
-            document.getElementById('impl-title').textContent = titles[patternCode] || 'Implementation';
-            document.getElementById('impl-description').textContent = 'Detailed implementation examples and best practices for this OAuth2 pattern.';
-
-            const content = document.getElementById('implementation-content');
-            
-            if (patternCode === 'A1') {
-                content.innerHTML = `
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3>Node.js/Express Implementation - Authorization Code with JWT</h3>
-                        <p>Traditional web application using server-side sessions with JWT tokens for API calls.</p>
-                    </div>
-                    <div class="code-example">const express = require('express');
-const session = require('express-session');
-const axios = require('axios');
-
-const app = express();
-
-// Session configuration
-app.use(session({
-  secret: 'your-session-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false, httpOnly: true }
-}));
-
-// Auth configuration
-const AUTH_CONFIG = {
-  clientId: 'your-client-id',
-  clientSecret: 'your-client-secret',
-  authServerUrl: 'https://auth.example.com',
-  redirectUri: 'http://localhost:3000/callback'
-};
-
-// Start auth flow
-app.get('/login', (req, res) => {
-  const authUrl = \`\${AUTH_CONFIG.authServerUrl}/authorize?\` +
-    \`response_type=code&\` +
-    \`client_id=\${AUTH_CONFIG.clientId}&\` +
-    \`redirect_uri=\${encodeURIComponent(AUTH_CONFIG.redirectUri)}&\` +
-    \`scope=openid profile api:read\`;
-  
-  res.redirect(authUrl);
-});
-
-// Handle callback
-app.get('/callback', async (req, res) => {
-  const { code } = req.query;
-  
-  try {
-    // Exchange code for tokens
-    const tokenResponse = await axios.post(\`\${AUTH_CONFIG.authServerUrl}/token\`, {
-      grant_type: 'authorization_code',
-      code: code,
-      client_id: AUTH_CONFIG.clientId,
-      client_secret: AUTH_CONFIG.clientSecret,
-      redirect_uri: AUTH_CONFIG.redirectUri
-    });
-
-    const { access_token, refresh_token } = tokenResponse.data;
-    
-    // Store tokens in session
-    req.session.accessToken = access_token;
-    req.session.refreshToken = refresh_token;
-    
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.status(500).json({ error: 'Token exchange failed' });
-  }
-});
-
-// Protected route with automatic token refresh
-app.get('/api/data', async (req, res) => {
-  if (!req.session.accessToken) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
-
-  try {
-    // Call API with JWT
-    const apiResponse = await axios.get('https://api.example.com/data', {
-      headers: {
-        'Authorization': \`Bearer \${req.session.accessToken}\`
-      }
-    });
-    
-    res.json(apiResponse.data);
-  } catch (error) {
-    if (error.response?.status === 401) {
-      // Token expired, try refresh
-      try {
-        await refreshTokens(req);
-        
-        // Retry API call
-        const retryResponse = await axios.get('https://api.example.com/data', {
-          headers: {
-            'Authorization': \`Bearer \${req.session.accessToken}\`
-          }
-        });
-        
-        res.json(retryResponse.data);
-      } catch (refreshError) {
-        res.status(401).json({ error: 'Authentication failed' });
-      }
-    } else {
-      res.status(500).json({ error: 'API call failed' });
-    }
-  }
-});
-
-async function refreshTokens(req) {
-  const response = await axios.post(\`\${AUTH_CONFIG.authServerUrl}/token\`, {
-    grant_type: 'refresh_token',
-    refresh_token: req.session.refreshToken,
-    client_id: AUTH_CONFIG.clientId,
-    client_secret: AUTH_CONFIG.clientSecret
-  });
-  
-  req.session.accessToken = response.data.access_token;
-  req.session.refreshToken = response.data.refresh_token;
-}
-
-app.listen(3000);</div>
-                `;
-            } else if (patternCode === 'A3') {
-                content.innerHTML = `
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3>React SPA with PKCE Implementation</h3>
-                        <p>Single Page Application using PKCE (Proof Key for Code Exchange) for security.</p>
-                    </div>
-                    <div class="code-example">import React, { useState, useEffect, createContext, useContext } from 'react';
-
-// PKCE utility functions
-function generateCodeVerifier() {
-  const array = new Uint32Array(56/2);
-  crypto.getRandomValues(array);
-  return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
-}
-
-async function generateCodeChallenge(verifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/\\+/g, '-')
-    .replace(/\\//g, '_')
-    .replace(/=/g, '');
-}
-
-const AuthContext = createContext();
-
-const AuthProvider = ({ children }) => {
-  const [tokens, setTokens] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const AUTH_CONFIG = {
-    clientId: 'your-spa-client-id',
-    authServerUrl: 'https://auth.example.com',
-    redirectUri: window.location.origin + '/callback',
-    apiBaseUrl: 'https://api.example.com'
-  };
-
-  useEffect(() => {
-    // Check for auth code in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    
-    if (code) {
-      handleCallback(code);
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  const login = async () => {
-    // Generate PKCE parameters
-    const codeVerifier = generateCodeVerifier();
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
-    
-    // Store code verifier for later use
-    sessionStorage.setItem('code_verifier', codeVerifier);
-    
-    // Redirect to auth server
-    const authUrl = \`\${AUTH_CONFIG.authServerUrl}/authorize?\` +
-      \`response_type=code&\` +
-      \`client_id=\${AUTH_CONFIG.clientId}&\` +
-      \`redirect_uri=\${encodeURIComponent(AUTH_CONFIG.redirectUri)}&\` +
-      \`scope=openid profile api:read&\` +
-      \`code_challenge=\${codeChallenge}&\` +
-      \`code_challenge_method=S256\`;
-    
-    window.location.href = authUrl;
-  };
-
-  const handleCallback = async (code) => {
-    const codeVerifier = sessionStorage.getItem('code_verifier');
-    
-    try {
-      const response = await fetch(\`\${AUTH_CONFIG.authServerUrl}/token\`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code,
-          client_id: AUTH_CONFIG.clientId,
-          redirect_uri: AUTH_CONFIG.redirectUri,
-          code_verifier: codeVerifier
-        })
-      });
-
-      const tokenData = await response.json();
-      setTokens(tokenData);
-      
-      // Clean up
-      sessionStorage.removeItem('code_verifier');
-      window.history.replaceState({}, document.title, '/');
-      
-    } catch (error) {
-      console.error('Token exchange failed:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const callAPI = async (endpoint) => {
-    if (!tokens) throw new Error('Not authenticated');
-
-    try {
-      const response = await fetch(\`\${AUTH_CONFIG.apiBaseUrl}\${endpoint}\`, {
-        headers: {
-          'Authorization': \`Bearer \${tokens.access_token}\`
-        }
-      });
-
-      if (response.status === 401) {
-        // Try to refresh token
-        await refreshTokens();
-        
-        // Retry the request
-        return fetch(\`\${AUTH_CONFIG.apiBaseUrl}\${endpoint}\`, {
-          headers: {
-            'Authorization': \`Bearer \${tokens.access_token}\`
-          }
-        });
-      }
-
-      return response;
-    } catch (error) {
-      console.error('API call failed:', error);
-      throw error;
-    }
-  };
-
-  const refreshTokens = async () => {
-    if (!tokens?.refresh_token) {
-      throw new Error('No refresh token available');
-    }
-
-    const response = await fetch(\`\${AUTH_CONFIG.authServerUrl}/token\`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        grant_type: 'refresh_token',
-        refresh_token: tokens.refresh_token,
-        client_id: AUTH_CONFIG.clientId
-      })
-    });
-
-    const newTokens = await response.json();
-    setTokens(newTokens);
-  };
-
-  const logout = () => {
-    setTokens(null);
-  };
-
-  if (loading) return <div>Loading...</div>;
-
-  return (
-    <AuthContext.Provider value={{
-      tokens, login, logout, callAPI, 
-      isAuthenticated: !!tokens
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-// Usage component
-const Dashboard = () => {
-  const { callAPI, isAuthenticated, login, logout } = useContext(AuthContext);
-  const [data, setData] = useState(null);
-
-  const fetchData = async () => {
-    try {
-      const response = await callAPI('/user/profile');
-      const userData = await response.json();
-      setData(userData);
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    }
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div>
-        <h1>Please log in</h1>
-        <button onClick={login}>Login with OAuth2</button>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <button onClick={fetchData}>Load Profile Data</button>
-      <button onClick={logout}>Logout</button>
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-    </div>
-  );
-};</div>
-                `;
-            } else {
-                content.innerHTML = `
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                        <h3>Implementation Guide: ${patternCode}</h3>
-                        <p>Detailed implementation examples and best practices for this OAuth2 pattern.</p>
-                        <p>This section will contain code examples, configuration snippets, and integration guides specific to the ${patternCode} pattern.</p>
-                        <p><strong>Key Implementation Points:</strong></p>
-                        <ul style="margin: 15px 0; padding-left: 20px;">
-                            <li>Secure token storage and handling</li>
-                            <li>Proper error handling and retry logic</li>
-                            <li>Token refresh mechanisms</li>
-                            <li>Security best practices</li>
-                        </ul>
-                    </div>
-                `;
-            }
-        }
-
-        // Code examples functions
-        function showCodeExample(exampleType) {
-            const examples = {
-                'nodejs-a1': {
-                    title: 'Node.js - Authorization Code Flow',
-                    code: `const express = require('express');
-const session = require('express-session');
-const axios = require('axios');
-
-const app = express();
-
-app.use(session({
-  secret: 'your-session-secret',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.get('/login', (req, res) => {
-  const authUrl = 'https://auth.example.com/authorize?' +
-    'response_type=code&' +
-    'client_id=your-client-id&' +
-    'redirect_uri=http://localhost:3000/callback';
-  res.redirect(authUrl);
-});
-
-app.get('/callback', async (req, res) => {
-  const { code } = req.query;
-  
-  try {
-    const response = await axios.post('https://auth.example.com/token', {
-      grant_type: 'authorization_code',
-      code: code,
-      client_id: 'your-client-id',
-      client_secret: 'your-client-secret'
-    });
-
-    req.session.tokens = response.data;
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.status(500).send('Authentication failed');
-  }
-});
-
-app.listen(3000);`
-                },
-                'react-a3': {
-                    title: 'React SPA - PKCE Flow',
-                    code: `import React, { useState, useEffect } from 'react';
-
-function generateCodeVerifier() {
-  return Math.random().toString(36).substring(2, 15) + 
-         Math.random().toString(36).substring(2, 15);
-}
-
-async function generateCodeChallenge(verifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return btoa(String.fromCharCode(...new Uint8Array(digest)))
-    .replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=/g, '');
-}
-
-function App() {
-  const [tokens, setTokens] = useState(null);
-
-  const login = async () => {
-    const verifier = generateCodeVerifier();
-    const challenge = await generateCodeChallenge(verifier);
-    
-    sessionStorage.setItem('code_verifier', verifier);
-    
-    const authUrl = 'https://auth.example.com/authorize?' +
-      'response_type=code&' +
-      'client_id=your-spa-client-id&' +
-      \`code_challenge=\${challenge}&\` +
-      'code_challenge_method=S256';
-    
-    window.location.href = authUrl;
-  };
-
-  return (
-    <div>
-      {tokens ? (
-        <div>Welcome! You're authenticated.</div>
-      ) : (
-        <button onClick={login}>Login</button>
-      )}
-    </div>
-  );
-}`
-                },
-                'dotnet-b1': {
-                    title: '.NET - Client Credentials with Background Refresh',
-                    code: `using Microsoft.Identity.Client;
-using System.Threading.Tasks;
-
-public class TokenService
-{
-    private readonly IConfidentialClientApplication _app;
-    private readonly string[] _scopes;
-    
-    public TokenService()
-    {
-        _app = ConfidentialClientApplicationBuilder
-            .Create("your-client-id")
-            .WithClientSecret("your-client-secret")
-            .WithAuthority("https://auth.example.com")
-            .Build();
-        
-        _scopes = new[] { "api://your-api/.default" };
-    }
-    
-    public async Task<string> GetAccessTokenAsync()
-    {
-        try
-        {
-            var result = await _app.AcquireTokenForClient(_scopes)
-                .ExecuteAsync();
-            return result.AccessToken;
-        }
-        catch (Exception ex)
-        {
-            // Handle token acquisition failure
-            throw new AuthenticationException("Failed to acquire token", ex);
-        }
-    }
-    
-    // Background service for token refresh
-    public class TokenRefreshService : BackgroundService
-    {
-        private readonly TokenService _tokenService;
-        
-        public TokenRefreshService(TokenService tokenService)
-        {
-            _tokenService = tokenService;
-        }
-        
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                try
-                {
-                    await _tokenService.GetAccessTokenAsync();
-                    await Task.Delay(TimeSpan.FromMinutes(45), stoppingToken);
-                }
-                catch (Exception ex)
-                {
-                    // Log error and retry
-                    await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
-                }
-            }
-        }
-    }`
-                },
-                'java-b1': {
-                    title: 'Java Spring - Microservices Authentication',
-                    code: `@Service
-@Component
-public class OAuth2TokenService {
-    
-    @Value("\${oauth.client-id}")
-    private String clientId;
-    
-    @Value("\${oauth.client-secret}")
-    private String clientSecret;
-    
-    @Value("\${oauth.token-url}")
-    private String tokenUrl;
-    
-    private final RestTemplate restTemplate;
-    private final RedisTemplate<String, String> redisTemplate;
-    
-    private static final String TOKEN_CACHE_KEY = "oauth2:access_token";
-    
-    // Background refresh every 45 minutes
-    @Scheduled(fixedRate = 45 * 60 * 1000)
-    public void refreshTokens() {
-        try {
-            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            params.add("grant_type", "client_credentials");
-            params.add("client_id", clientId);
-            params.add("client_secret", clientSecret);
-            params.add("scope", "api:read api:write");
-            
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            
-            HttpEntity<MultiValueMap<String, String>> request = 
-                new HttpEntity<>(params, headers);
-            
-            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
-                tokenUrl, request, TokenResponse.class);
-            
-            if (response.getBody() != null) {
-                String token = response.getBody().getAccessToken();
-                Duration expiry = Duration.ofSeconds(
-                    response.getBody().getExpiresIn() - 60); // 1min buffer
-                    
-                redisTemplate.opsForValue().set(TOKEN_CACHE_KEY, token, expiry);
-            }
-        } catch (Exception e) {
-            // Log error - token refresh failed
-            logger.error("Token refresh failed", e);
-        }
-    }
-    
-    public String getAccessToken() {
-        String token = redisTemplate.opsForValue().get(TOKEN_CACHE_KEY);
-        if (token == null) {
-            refreshTokens(); // Synchronous refresh if no cached token
-            token = redisTemplate.opsForValue().get(TOKEN_CACHE_KEY);
-        }
-        return token;
-    }
-    
-    @RestController
-    public class ApiController {
-        
-        @Autowired
-        private OAuth2TokenService tokenService;
-        
-        @GetMapping("/api/data")
-        public ResponseEntity<?> getData() {
-            String token = tokenService.getAccessToken();
-            
-            HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(token);
-            
-            HttpEntity<?> entity = new HttpEntity<>(headers);
-            
-            try {
-                return restTemplate.exchange(
-                    "https://api.example.com/data", 
-                    HttpMethod.GET, 
-                    entity, 
-                    String.class);
-            } catch (HttpClientErrorException.Unauthorized e) {
-                // Token might be expired, refresh and retry
-                tokenService.refreshTokens();
-                headers.setBearerAuth(tokenService.getAccessToken());
-                entity = new HttpEntity<>(headers);
-                
-                return restTemplate.exchange(
-                    "https://api.example.com/data", 
-                    HttpMethod.GET, 
-                    entity, 
-                    String.class);
-            }
-        }
-    }
-}`
-                }
-            };
-
-            const example = examples[exampleType];
-            if (example) {
-                const content = document.getElementById('code-example-content');
-                content.innerHTML = '<h4>' + example.title + '</h4><div class="code-example">' + example.code + '</div>';
+                diagramElement.innerHTML = '<div style="padding: 40px; text-align: center; color: #666;">Diagram not available</div>';
             }
         }
 
