@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth2 Patterns Overview - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>OAuth2 Patterns Overview</h1>
+            <p>Comprehensive guide to OAuth2 flows with sequence diagrams and implementation details</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div class="step-title">All OAuth2 Patterns</div>
+            <div class="step-description">
+                Explore our complete collection of OAuth2 flows. Each pattern is designed for specific use cases 
+                and includes detailed sequence diagrams showing the complete implementation flow.
+            </div>
+
+            <h2 style="color: #333; margin: 40px 0 20px 0; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+                👤 User Authentication Flows (Authorization Code)
+            </h2>
+
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">A1</span>
+                        <div class="pattern-title">Authorization Code + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">High-performance web applications with secure token rotation</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Traditional web apps requiring fast API responses</p>
+                    <div style="margin-top: 15px;">
+                        <a href="a1.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">A2</span>
+                        <div class="pattern-title">Authorization Code + Opaque + Introspection<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Enterprise web applications with centralized token control</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Enterprise systems requiring strict access control</p>
+                    <div style="margin-top: 15px;">
+                        <a href="a2.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">A3</span>
+                        <div class="pattern-title">Authorization Code + PKCE + JWT<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Single Page Apps and mobile applications</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Modern SPAs and mobile applications</p>
+                    <div style="margin-top: 15px;">
+                        <a href="a3.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">A4</span>
+                        <div class="pattern-title">Device Authorization Flow<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Devices without browsers or limited input capabilities</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Smart TVs, IoT devices, CLI tools</p>
+                    <div style="margin-top: 15px;">
+                        <a href="a4.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="color: #333; margin: 40px 0 20px 0; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+                🤖 Service-to-Service Flows (Client Credentials)
+            </h2>
+
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">B1</span>
+                        <div class="pattern-title">Client Credentials + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Enterprise microservices with token rotation</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Production microservice architectures</p>
+                    <div style="margin-top: 15px;">
+                        <a href="b1.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">B2</span>
+                        <div class="pattern-title">Client Credentials + Opaque + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Enterprise services with centralized token control</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Enterprise systems requiring governance</p>
+                    <div style="margin-top: 15px;">
+                        <a href="b2.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+
+                <div class="pattern-card">
+                    <div class="pattern-header">
+                        <span class="pattern-code-badge">B3</span>
+                        <div class="pattern-title">Client Credentials Simple (No Refresh)</div>
+                    </div>
+                    <p style="color: #666; margin: 15px 0;">Simple service integrations with minimal complexity</p>
+                    <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Development environments and simple integrations</p>
+                    <div style="margin-top: 15px;">
+                        <a href="b3.html" class="btn btn-primary">View Diagram</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 40px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🎯 Quick Pattern Selection Guide</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">Need User Login?</h4>
+                        <p style="color: #666; margin-bottom: 10px;">Choose A-series patterns</p>
+                        <ul style="color: #666; font-size: 0.9rem; margin-left: 20px;">
+                            <li>A1: Fast web apps</li>
+                            <li>A2: Enterprise control</li>
+                            <li>A3: SPA/Mobile</li>
+                            <li>A4: Devices/IoT</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">Service-to-Service?</h4>
+                        <p style="color: #666; margin-bottom: 10px;">Choose B-series patterns</p>
+                        <ul style="color: #666; font-size: 0.9rem; margin-left: 20px;">
+                            <li>B1: High performance</li>
+                            <li>B2: Enterprise governance</li>
+                            <li>B3: Simple development</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">JWT vs Opaque?</h4>
+                        <p style="color: #666; margin-bottom: 10px;">Key trade-offs</p>
+                        <ul style="color: #666; font-size: 0.9rem; margin-left: 20px;">
+                            <li>JWT: Performance</li>
+                            <li>Opaque: Control</li>
+                            <li>Both: Refresh tokens</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+                <a href="../learn/comparison.html" class="btn btn-primary">Quick Comparison Guide →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
