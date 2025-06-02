@@ -701,13 +701,10 @@
             const content = document.getElementById('decision-content');
             content.innerHTML = `
                 <div class="decision-step">
-                    <div class="decision-question">What type of application are you building?</div>
+                    <div class="decision-question">Does your application involve user authentication?</div>
                     <div class="decision-options">
-                        <button class="decision-btn" onclick="decisionStep('web-app')">Web Application (server-side)</button>
-                        <button class="decision-btn" onclick="decisionStep('spa')">Single Page App (SPA)</button>
-                        <button class="decision-btn" onclick="decisionStep('mobile')">Mobile App</button>
-                        <button class="decision-btn" onclick="decisionStep('service')">Service/API (no user)</button>
-                        <button class="decision-btn" onclick="decisionStep('device')">Device/IoT</button>
+                        <button class="decision-btn" onclick="decisionStep('user-auth')">👤 Yes - Users need to log in</button>
+                        <button class="decision-btn" onclick="decisionStep('service-auth')">🤖 No - Service-to-service only</button>
                     </div>
                 </div>
             `;
@@ -717,37 +714,51 @@
             decisionPath.push(choice);
             const content = document.getElementById('decision-content');
             
-            if (choice === 'web-app') {
+            if (choice === 'user-auth') {
+                // User authentication flows (Authorization Code variants)
+                content.innerHTML = `
+                    <div class="decision-step">
+                        <div class="decision-question">What type of application are you building?</div>
+                        <div class="decision-options">
+                            <button class="decision-btn" onclick="decisionStep('web-app')">🌐 Web Application (server-side)</button>
+                            <button class="decision-btn" onclick="decisionStep('spa')">📱 Single Page App (SPA)</button>
+                            <button class="decision-btn" onclick="decisionStep('mobile')">📲 Mobile App</button>
+                            <button class="decision-btn" onclick="decisionStep('device')">📺 Device/IoT (limited input)</button>
+                        </div>
+                    </div>
+                `;
+            } else if (choice === 'service-auth') {
+                // Service-to-service flows (Client Credentials variants)
+                content.innerHTML = `
+                    <div class="decision-step">
+                        <div class="decision-question">What's your deployment environment?</div>
+                        <div class="decision-options">
+                            <button class="decision-btn" onclick="decisionStep('production')">🏭 Production / Enterprise</button>
+                            <button class="decision-btn" onclick="recommendPattern('B3')">🧪 Development / Simple integration</button>
+                        </div>
+                    </div>
+                `;
+            } else if (choice === 'web-app') {
                 content.innerHTML = `
                     <div class="decision-step">
                         <div class="decision-question">What are your main requirements?</div>
                         <div class="decision-options">
-                            <button class="decision-btn" onclick="recommendPattern('A1')">High Performance / Fast API calls</button>
-                            <button class="decision-btn" onclick="recommendPattern('A2')">Strict Security / Immediate token revocation</button>
+                            <button class="decision-btn" onclick="recommendPattern('A1')">⚡ High Performance / Fast API calls</button>
+                            <button class="decision-btn" onclick="recommendPattern('A2')">🔒 Strict Security / Immediate token revocation</button>
                         </div>
                     </div>
                 `;
             } else if (choice === 'spa' || choice === 'mobile') {
                 recommendPattern('A3');
-            } else if (choice === 'service') {
-                content.innerHTML = `
-                    <div class="decision-step">
-                        <div class="decision-question">What's your environment?</div>
-                        <div class="decision-options">
-                            <button class="decision-btn" onclick="decisionStep('production')">Production / Enterprise</button>
-                            <button class="decision-btn" onclick="recommendPattern('B3')">Development / Simple integration</button>
-                        </div>
-                    </div>
-                `;
             } else if (choice === 'device') {
                 recommendPattern('A4');
             } else if (choice === 'production') {
                 content.innerHTML = `
                     <div class="decision-step">
-                        <div class="decision-question">What's more important?</div>
+                        <div class="decision-question">What's more important for your services?</div>
                         <div class="decision-options">
-                            <button class="decision-btn" onclick="recommendPattern('B1')">Performance / High availability</button>
-                            <button class="decision-btn" onclick="recommendPattern('B2')">Control / Audit requirements</button>
+                            <button class="decision-btn" onclick="recommendPattern('B1')">⚡ Performance / High availability</button>
+                            <button class="decision-btn" onclick="recommendPattern('B2')">🔍 Control / Audit requirements</button>
                         </div>
                     </div>
                 `;
