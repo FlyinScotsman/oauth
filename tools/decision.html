@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth2 Decision Tree - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="decision.html" class="nav-link">Decision Tree</a>
+                <a href="../patterns/overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>OAuth2 Decision Tree</h1>
+            <p>Answer a few questions to find the best OAuth2 flow for your use case</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div class="step-title">Find Your Perfect OAuth2 Pattern</div>
+            <div class="step-description">
+                This interactive decision tree will guide you to the most appropriate OAuth2 flow 
+                based on your specific requirements and constraints.
+            </div>
+
+            <div class="decision-tree">
+                <div id="decision-content">
+                    <div class="decision-step">
+                        <div class="decision-question">Does your application involve user authentication?</div>
+                        <div class="decision-options">
+                            <button class="decision-btn" onclick="decisionStep('user-auth')">👤 Yes - Users need to log in</button>
+                            <button class="decision-btn" onclick="decisionStep('service-auth')">🤖 No - Service-to-service only</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="../index.html" class="btn btn-secondary">← Back to Home</a>
+                <button class="btn btn-secondary" onclick="resetDecisionTree()">🔄 Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="../patterns/overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let decisionPath = [];
+
+        function resetDecisionTree() {
+            decisionPath = [];
+            const content = document.getElementById('decision-content');
+            content.innerHTML = '<div class="decision-step"><div class="decision-question">Does your application involve user authentication?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'user-auth\')">👤 Yes - Users need to log in</button><button class="decision-btn" onclick="decisionStep(\'service-auth\')">🤖 No - Service-to-service only</button></div></div>';
+        }
+
+        function decisionStep(choice) {
+            decisionPath.push(choice);
+            const content = document.getElementById('decision-content');
+            
+            if (choice === 'user-auth') {
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What type of application are you building?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'web-app\')">🌐 Web Application</button><button class="decision-btn" onclick="recommendPattern(\'A3\')">📱 SPA/Mobile App</button><button class="decision-btn" onclick="recommendPattern(\'A4\')">📺 Device/IoT</button></div></div>';
+            } else if (choice === 'service-auth') {
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is your environment?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'production\')">🏭 Production</button><button class="decision-btn" onclick="recommendPattern(\'B3\')">🧪 Development</button></div></div>';
+            } else if (choice === 'web-app') {
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What are your main requirements?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'A1\')">⚡ High Performance</button><button class="decision-btn" onclick="recommendPattern(\'A2\')">🔒 Strict Control</button></div></div>';
+            } else if (choice === 'production') {
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is more important?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'B1\')">⚡ Performance</button><button class="decision-btn" onclick="recommendPattern(\'B2\')">🔍 Control/Audit</button></div></div>';
+            }
+        }
+
+        function recommendPattern(pattern) {
+            const patterns = {
+                'A1': { title: 'Authorization Code + JWT + Refresh', description: 'Perfect for high-performance web applications that need fast API responses.' },
+                'A2': { title: 'Authorization Code + Opaque + Introspection', description: 'Ideal for enterprise applications requiring strict token control.' },
+                'A3': { title: 'Authorization Code + PKCE + JWT', description: 'The standard for SPAs and mobile apps with PKCE security.' },
+                'A4': { title: 'Device Authorization Flow', description: 'Designed for devices without browsers or limited input.' },
+                'B1': { title: 'Client Credentials + JWT + Refresh', description: 'High-performance service-to-service communication.' },
+                'B2': { title: 'Client Credentials + Opaque + Refresh', description: 'Enterprise service communication with strict governance.' },
+                'B3': { title: 'Client Credentials Simple', description: 'Simple service integration for development or basic needs.' }
+            };
+
+            const p = patterns[pattern];
+            const content = document.getElementById('decision-content');
+            
+            content.innerHTML = '<div style="background: #e8f5e8; border: 2px solid #4CAF50; border-radius: 15px; padding: 25px; text-align: center;"><h3 style="color: #2e7d32; margin-bottom: 15px;">✅ Recommended Pattern: ' + pattern + '</h3><h4 style="color: #333; margin-bottom: 10px;">' + p.title + '</h4><p style="color: #666; margin-bottom: 20px;">' + p.description + '</p><div style="margin-top: 20px;"><a href="../patterns/' + pattern.toLowerCase() + '.html" class="btn btn-primary">View Detailed Diagram</a><a href="../patterns/overview.html" class="btn btn-secondary">Browse All Patterns</a></div></div>';
+        }
+    </script>
+</body>
+</html>
