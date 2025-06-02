@@ -328,11 +328,13 @@
                         <div style="margin-bottom: 15px;">
                             <h4 style="color: #333;">Confidential Client</h4>
                             <p style="color: #666; margin: 8px 0;">Can securely store credentials (client secret). Examples: web servers, backend services.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">✅ Has client_secret<br/>✅ Runs on secure server<br/>✅ Users can't access code</div>
                         </div>
 
                         <div>
                             <h4 style="color: #333;">Public Client</h4>
                             <p style="color: #666; margin: 8px 0;">Cannot securely store credentials. Examples: SPAs, mobile apps, desktop apps.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">❌ No client_secret<br/>❌ Code visible to users<br/>✅ Uses PKCE for security</div>
                         </div>
                     </div>
 
@@ -342,11 +344,111 @@
                         <div style="margin-bottom: 15px;">
                             <h4 style="color: #333;">JWT (JSON Web Token)</h4>
                             <p style="color: #666; margin: 8px 0;">Self-contained tokens that can be validated without calling the auth server.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">⚡ Fast validation<br/>📦 Contains user info<br/>🔍 Larger size</div>
                         </div>
 
                         <div>
                             <h4 style="color: #333;">Opaque Token</h4>
                             <p style="color: #666; margin: 8px 0;">Random strings that require introspection calls to validate.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">🔍 Requires introspection<br/>🎛️ Centralized control<br/>📏 Smaller size</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 20px; border-radius: 8px;">
+                        <h3 style="color: #2E7D32; margin-bottom: 15px;">🔄 Grant Types</h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #333;">Authorization Code</h4>
+                            <p style="color: #666; margin: 8px 0;">For applications that involve users. Most secure flow for user authentication.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">👤 User involved<br/>🔐 Most secure<br/>📱 Web/Mobile apps</div>
+                        </div>
+
+                        <div>
+                            <h4 style="color: #333;">Client Credentials</h4>
+                            <p style="color: #666; margin: 8px 0;">For service-to-service communication with no user involved.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">🤖 No user involved<br/>⚙️ Service identity<br/>🔗 API-to-API calls</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 20px; border-radius: 8px;">
+                        <h3 style="color: #F57C00; margin-bottom: 15px;">🛡️ Security Features</h3>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <h4 style="color: #333;">PKCE (Proof Key for Code Exchange)</h4>
+                            <p style="color: #666; margin: 8px 0;">Security extension that prevents authorization code interception attacks.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">🔒 Code challenge/verifier<br/>📱 Required for public clients<br/>🛡️ Prevents code hijacking</div>
+                        </div>
+
+                        <div>
+                            <h4 style="color: #333;">Refresh Tokens</h4>
+                            <p style="color: #666; margin: 8px 0;">Long-lived tokens used to obtain new access tokens without re-authentication.</p>
+                            <div style="background: #fff; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.9em;">🔄 Renew access tokens<br/>⏰ Long-lived<br/>🔐 Single-use (rotation)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                    <h3 style="color: #333; margin-bottom: 20px;">📚 Glossary of Terms</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div>
+                            <dl style="margin: 0;">
+                                <dt style="font-weight: bold; color: #2196F3; margin-top: 15px;">Authorization Server</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Issues access tokens after authenticating the user and obtaining authorization.</dd>
+                                
+                                <dt style="font-weight: bold; color: #2196F3; margin-top: 15px;">Resource Server</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">The API server that hosts protected resources and accepts access tokens.</dd>
+                                
+                                <dt style="font-weight: bold; color: #2196F3; margin-top: 15px;">Client</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">The application requesting access to protected resources (your app).</dd>
+                                
+                                <dt style="font-weight: bold; color: #2196F3; margin-top: 15px;">Resource Owner</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">The user who owns the data and can grant access to it.</dd>
+                                
+                                <dt style="font-weight: bold; color: #2196F3; margin-top: 15px;">Scope</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Defines the level of access requested (e.g., "read:profile", "write:posts").</dd>
+                            </dl>
+                        </div>
+                        
+                        <div>
+                            <dl style="margin: 0;">
+                                <dt style="font-weight: bold; color: #9C27B0; margin-top: 15px;">Access Token</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Short-lived token used to access protected resources. Usually 15-60 minutes.</dd>
+                                
+                                <dt style="font-weight: bold; color: #9C27B0; margin-top: 15px;">Authorization Code</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Temporary code exchanged for tokens. Single-use and short-lived (10 minutes).</dd>
+                                
+                                <dt style="font-weight: bold; color: #9C27B0; margin-top: 15px;">Redirect URI</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Where the auth server sends the user after authorization.</dd>
+                                
+                                <dt style="font-weight: bold; color: #9C27B0; margin-top: 15px;">Introspection</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">API endpoint to check if a token is valid and get metadata about it.</dd>
+                                
+                                <dt style="font-weight: bold; color: #9C27B0; margin-top: 15px;">Bearer Token</dt>
+                                <dd style="margin: 5px 0 0 0; color: #666;">Access token sent in the "Authorization: Bearer xxx" HTTP header.</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 15px; margin: 20px 0;">
+                    <h3 style="margin-bottom: 15px;">💡 Key Security Principles</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <div>
+                            <h4 style="margin-bottom: 8px;">🎯 Principle of Least Privilege</h4>
+                            <p style="opacity: 0.9; font-size: 0.9em;">Request only the minimum scopes needed for your application to function.</p>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 8px;">⏰ Short-lived Tokens</h4>
+                            <p style="opacity: 0.9; font-size: 0.9em;">Use short expiration times for access tokens to limit exposure if compromised.</p>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 8px;">🔄 Token Rotation</h4>
+                            <p style="opacity: 0.9; font-size: 0.9em;">Rotate refresh tokens on each use to detect token theft.</p>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 8px;">🔒 Secure Storage</h4>
+                            <p style="opacity: 0.9; font-size: 0.9em;">Store tokens securely - never in localStorage for sensitive apps.</p>
                         </div>
                     </div>
                 </div>
@@ -389,9 +491,22 @@
                             <span class="pattern-code-badge">A1</span>
                             <div class="pattern-title">Authorization Code + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <p>High-performance web applications with secure token rotation</p>
+                        <p style="color: #666; margin: 15px 0;">High-performance web applications with secure token rotation</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Traditional web apps requiring fast API responses</p>
                         <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('A1')">View Diagram</button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-header">
+                            <span class="pattern-code-badge">A2</span>
+                            <div class="pattern-title">Authorization Code + Opaque + Introspection<span class="recommended-badge">RECOMMENDED</span></div>
+                        </div>
+                        <p style="color: #666; margin: 15px 0;">Enterprise web applications with centralized token control</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Enterprise systems requiring strict access control</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="showDiagram('A2')">View Diagram</button>
                         </div>
                     </div>
 
@@ -400,9 +515,22 @@
                             <span class="pattern-code-badge">A3</span>
                             <div class="pattern-title">Authorization Code + PKCE + JWT<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <p>Single Page Apps and mobile applications</p>
+                        <p style="color: #666; margin: 15px 0;">Single Page Apps and mobile applications</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Modern SPAs and mobile applications</p>
                         <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('A3')">View Diagram</button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-header">
+                            <span class="pattern-code-badge">A4</span>
+                            <div class="pattern-title">Device Authorization Flow<span class="recommended-badge">RECOMMENDED</span></div>
+                        </div>
+                        <p style="color: #666; margin: 15px 0;">Devices without browsers or limited input capabilities</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Smart TVs, IoT devices, CLI tools</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="showDiagram('A4')">View Diagram</button>
                         </div>
                     </div>
 
@@ -411,9 +539,34 @@
                             <span class="pattern-code-badge">B1</span>
                             <div class="pattern-title">Client Credentials + JWT + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
                         </div>
-                        <p>Enterprise microservices with token rotation</p>
+                        <p style="color: #666; margin: 15px 0;">Enterprise microservices with token rotation</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Production microservice architectures</p>
                         <div style="margin-top: 15px;">
                             <button class="btn btn-primary" onclick="showDiagram('B1')">View Diagram</button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-header">
+                            <span class="pattern-code-badge">B2</span>
+                            <div class="pattern-title">Client Credentials + Opaque + Refresh<span class="recommended-badge">RECOMMENDED</span></div>
+                        </div>
+                        <p style="color: #666; margin: 15px 0;">Enterprise services with centralized token control</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Enterprise systems requiring governance</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="showDiagram('B2')">View Diagram</button>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <div class="pattern-header">
+                            <span class="pattern-code-badge">B3</span>
+                            <div class="pattern-title">Client Credentials Simple (No Refresh)</div>
+                        </div>
+                        <p style="color: #666; margin: 15px 0;">Simple service integrations with minimal complexity</p>
+                        <p style="color: #666; font-style: italic;"><strong>Best for:</strong> Development environments and simple integrations</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn btn-primary" onclick="showDiagram('B3')">View Diagram</button>
                         </div>
                     </div>
                 </div>
@@ -558,20 +711,25 @@
             const content = document.getElementById('decision-content');
             
             if (choice === 'user-auth') {
-                content.innerHTML = '<div class="decision-step"><div class="decision-question">What type of application are you building?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'web-app\')">🌐 Web Application</button><button class="decision-btn" onclick="recommendPattern(\'A3\')">📱 SPA/Mobile App</button></div></div>';
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What type of application are you building?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'web-app\')">🌐 Web Application</button><button class="decision-btn" onclick="recommendPattern(\'A3\')">📱 SPA/Mobile App</button><button class="decision-btn" onclick="recommendPattern(\'A4\')">📺 Device/IoT</button></div></div>';
             } else if (choice === 'service-auth') {
-                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is your environment?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'B1\')">🏭 Production</button><button class="decision-btn" onclick="recommendPattern(\'B3\')">🧪 Development</button></div></div>';
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is your environment?</div><div class="decision-options"><button class="decision-btn" onclick="decisionStep(\'production\')">🏭 Production</button><button class="decision-btn" onclick="recommendPattern(\'B3\')">🧪 Development</button></div></div>';
             } else if (choice === 'web-app') {
-                recommendPattern('A1');
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What are your main requirements?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'A1\')">⚡ High Performance</button><button class="decision-btn" onclick="recommendPattern(\'A2\')">🔒 Strict Control</button></div></div>';
+            } else if (choice === 'production') {
+                content.innerHTML = '<div class="decision-step"><div class="decision-question">What is more important?</div><div class="decision-options"><button class="decision-btn" onclick="recommendPattern(\'B1\')">⚡ Performance</button><button class="decision-btn" onclick="recommendPattern(\'B2\')">🔍 Control/Audit</button></div></div>';
             }
         }
 
         function recommendPattern(pattern) {
             const patterns = {
-                'A1': { title: 'Authorization Code + JWT + Refresh', description: 'Perfect for high-performance web applications.' },
-                'A3': { title: 'Authorization Code + PKCE + JWT', description: 'The standard for SPAs and mobile apps.' },
+                'A1': { title: 'Authorization Code + JWT + Refresh', description: 'Perfect for high-performance web applications that need fast API responses.' },
+                'A2': { title: 'Authorization Code + Opaque + Introspection', description: 'Ideal for enterprise applications requiring strict token control.' },
+                'A3': { title: 'Authorization Code + PKCE + JWT', description: 'The standard for SPAs and mobile apps with PKCE security.' },
+                'A4': { title: 'Device Authorization Flow', description: 'Designed for devices without browsers or limited input.' },
                 'B1': { title: 'Client Credentials + JWT + Refresh', description: 'High-performance service-to-service communication.' },
-                'B3': { title: 'Client Credentials Simple', description: 'Simple service integration for development.' }
+                'B2': { title: 'Client Credentials + Opaque + Refresh', description: 'Enterprise service communication with strict governance.' },
+                'B3': { title: 'Client Credentials Simple', description: 'Simple service integration for development or basic needs.' }
             };
 
             const p = patterns[pattern];
@@ -593,14 +751,22 @@
         function loadDiagramContent(patternCode) {
             const titles = {
                 'A1': 'A1: Authorization Code + JWT + Refresh Tokens',
+                'A2': 'A2: Authorization Code + Opaque + Introspection',
                 'A3': 'A3: Authorization Code + PKCE + JWT',
-                'B1': 'B1: Client Credentials + JWT + Refresh Tokens'
+                'A4': 'A4: Device Authorization Flow',
+                'B1': 'B1: Client Credentials + JWT + Refresh Tokens',
+                'B2': 'B2: Client Credentials + Opaque + Refresh Tokens',
+                'B3': 'B3: Client Credentials Simple (No Refresh)'
             };
 
             const diagrams = {
                 'A1': 'sequenceDiagram\n    participant U as User\n    participant B as Browser\n    participant A as Web App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    U->>B: Access protected resource\n    B->>A: Request page\n    A->>A: Check session\n    A->>B: Redirect to /authorize\n    B->>AS: GET /authorize\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>B: Redirect with auth code\n    B->>A: GET /callback?code=abc123\n    A->>AS: POST /token\n    AS->>A: JWT access_token + refresh_token\n    A->>API: API call with JWT\n    API->>A: Protected data',
+                'A2': 'sequenceDiagram\n    participant U as User\n    participant B as Browser\n    participant A as Web App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    U->>B: Access protected resource\n    B->>A: Request page\n    A->>A: Check session\n    A->>B: Redirect to /authorize\n    B->>AS: GET /authorize\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>B: Redirect with auth code\n    B->>A: GET /callback?code=abc123\n    A->>AS: POST /token\n    AS->>A: Opaque access_token + refresh_token\n    A->>AS: POST /introspect (token)\n    AS->>A: Token metadata\n    A->>API: API call with opaque token\n    API->>AS: POST /introspect (token)\n    AS->>API: Token metadata\n    API->>A: Protected data',
                 'A3': 'sequenceDiagram\n    participant U as User\n    participant SPA as Single Page App\n    participant AS as Auth Server\n    participant API as Resource API\n\n    SPA->>SPA: Generate PKCE challenge\n    U->>SPA: Click login\n    SPA->>AS: Redirect with code_challenge\n    AS->>U: Show login form\n    U->>AS: Username/password\n    AS->>SPA: Redirect with auth code\n    SPA->>AS: POST /token with code_verifier\n    AS->>SPA: JWT access_token\n    SPA->>API: API call with JWT\n    API->>SPA: Protected data',
-                'B1': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: JWT access_token + refresh_token\n    S1->>S2: API call with JWT\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New JWT tokens'
+                'A4': 'sequenceDiagram\n    participant D as Device\n    participant U as User\n    participant B as User Browser\n    participant AS as Auth Server\n    participant API as Resource API\n\n    D->>AS: POST /device_authorization\n    AS->>D: device_code + user_code + verification_uri\n    D->>U: Display: "Go to verification_uri, enter user_code"\n    U->>B: Navigate to verification_uri\n    B->>AS: GET verification_uri\n    AS->>U: Enter user_code form\n    U->>AS: Submit user_code\n    AS->>U: Show login form\n    U->>AS: Username/password\n    \n    loop Polling\n        D->>AS: POST /token (device_code)\n        AS->>D: authorization_pending OR access_token\n    end\n    \n    AS->>D: JWT access_token\n    D->>API: API call with JWT\n    API->>D: Protected data',
+                'B1': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: JWT access_token + refresh_token\n    S1->>S2: API call with JWT\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New JWT tokens',
+                'B2': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: Opaque access_token + refresh_token\n    S1->>AS: POST /introspect (token)\n    AS->>S1: Token validity\n    S1->>S2: API call with opaque token\n    S2->>AS: POST /introspect (token)\n    AS->>S2: Token validity\n    S2->>S1: Protected data\n\n    Note over S1: Background refresh\n    S1->>AS: Refresh token\n    AS->>S1: New opaque tokens',
+                'B3': 'sequenceDiagram\n    participant S1 as Service A\n    participant AS as Auth Server\n    participant S2 as Service B\n\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: access_token (short-lived)\n    S1->>S2: API call with token\n    S2->>S1: Protected data\n\n    Note over S1: Token expiry\n    S1->>S2: API call with expired token\n    S2->>S1: 401 Unauthorized\n    S1->>AS: POST /token (client_credentials)\n    AS->>S1: New access_token\n    S1->>S2: Retry API call\n    S2->>S1: Protected data'
             };
 
             document.getElementById('diagram-title').textContent = titles[patternCode] || 'OAuth2 Diagram';
