@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1: Authorization Code + JWT + Refresh - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>A1: Authorization Code + JWT + Refresh</h1>
+            <p>High-performance web applications with secure token rotation</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #1976D2; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Traditional web applications requiring fast API responses and high performance.
+                    This pattern combines the security of the Authorization Code flow with the performance benefits of JWT tokens.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #1976D2;">Client Type:</strong><br/>
+                        <span style="color: #666;">Confidential (Web Server)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #1976D2;">Token Type:</strong><br/>
+                        <span style="color: #666;">JWT + Refresh Token</span>
+                    </div>
+                    <div>
+                        <strong style="color: #1976D2;">Use Case:</strong><br/>
+                        <span style="color: #666;">High-Performance Web Apps</span>
+                    </div>
+                    <div>
+                        <strong style="color: #1976D2;">Complexity:</strong><br/>
+                        <span style="color: #666;">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the complete OAuth2 Authorization Code flow with JWT tokens and refresh token rotation.
+                Note the performance benefit of local JWT validation vs. introspection calls.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over U,RS: OAuth2 Authorization Code Flow with JWT Token<br/>(Best approach for Browser-hosted App for redirections)
+
+    U->>CA: 1. Click "Login" or access protected resource
+    CA->>U: 2. Redirect to Authorization Server
+    
+    Note over AS: GET https://auth.server.com/authorize?<br/>response_type=code&client_id=CLIENT_ID&<br/>redirect_uri=REDIRECT_URI&scope=SCOPE&<br/>state=RANDOM_STATE_VALUE
+    
+    U->>AS: 3. User authentication (username/password)
+    AS->>AS: 4. User consent screen
+    AS->>U: 5. User grants consent
+    AS->>CA: 6. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 7. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>CA: 8. Exchange authorization code for tokens
+    
+    Note over CA: Returns JWT access token + refresh token
+    
+    CA->>CA: 9. Store tokens securely
+    CA->>U: 10. Return protected resource
+    U->>CA: 11. API call with JWT token
+    CA->>RS: 12. API call with JWT token
+    
+    Note over RS: Authorization: Bearer JWT_ACCESS_TOKEN
+    
+    RS->>RS: 13. Validate JWT signature<br/>(Check expiry, iss, aud, etc.)
+    RS->>CA: 14. Return protected data
+    CA->>U: 15. Return API call result
+    
+    Note over U,RS: Token Refresh Flow (when JWT expires)
+    
+    CA->>RS: 16. API call with expired JWT
+    RS->>CA: 17. Return 401 Unauthorized
+    CA->>AS: 18. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    
+    AS->>CA: 19. Generate new JWT access token
+    
+    Note over CA: Returns new JWT access token + refresh token
+    
+    CA->>CA: 20. Store tokens securely
+    CA->>RS: 21. Return with JWT access token
+    RS->>CA: 22. Return protected data
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Fast API calls (local JWT validation)</li>
+                        <li>Secure server-side token storage</li>
+                        <li>Automatic token refresh</li>
+                        <li>Stateless resource servers</li>
+                        <li>High scalability</li>
+                        <li>Industry standard approach</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Cannot revoke JWT tokens immediately</li>
+                        <li>JWT tokens contain user data</li>
+                        <li>Requires secure token storage</li>
+                        <li>Client secret must be protected</li>
+                        <li>More complex than simple flows</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Use HTTPS for all communications</li>
+                        <li>Validate JWT signature and claims</li>
+                        <li>Implement token refresh logic</li>
+                        <li>Store tokens in secure HTTP-only cookies</li>
+                        <li>Use short JWT expiration times (15-60 min)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">📋 Key Security Points</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔐 Authorization Code Security</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Code is single-use and short-lived (10 minutes), exchanged server-side with client secret.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎫 JWT Token Security</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Cryptographically signed, self-contained, with expiration and audience validation.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔄 Refresh Token Security</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Long-lived, single-use, rotated on each refresh to detect compromise.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="overview.html" class="btn btn-secondary">← All Patterns</a>
+                <a href="a2.html" class="btn btn-primary">Next: A2 (Opaque + Introspection) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
