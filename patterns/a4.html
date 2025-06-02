@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4: Device Authorization Flow - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>A4: Device Authorization Flow</h1>
+            <p>Devices without browsers or limited input capabilities</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #F57C00; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Smart TVs, IoT devices, CLI tools, and other devices that either lack a browser 
+                    or have limited input capabilities. Users authenticate on a separate device.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #F57C00;">Client Type:</strong><br/>
+                        <span style="color: #666;">Public (Device/IoT)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Token Type:</strong><br/>
+                        <span style="color: #666;">JWT + Device Code</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Use Case:</strong><br/>
+                        <span style="color: #666;">Smart TV, IoT, CLI Tools</span>
+                    </div>
+                    <div>
+                        <strong style="color: #F57C00;">Complexity:</strong><br/>
+                        <span style="color: #666;">High</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the Device Authorization Flow where the user authenticates on a separate device (like their phone or computer) 
+                while the requesting device (like a smart TV) polls for authorization completion.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant D as Device
+    participant U as User
+    participant B as User's Browser  
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over D,RS: OAuth2 Device Authorization Flow<br/>(Best approach for Browserless or Input constrained devices)
+
+    D->>AS: 1. Initiate device to access protected resource<br/>at the request of user, for the enterprise
+
+    Note over AS: POST https://auth.server.com/device_authorization<br/>client_id=CLIENT_ID&<br/>scope=SCOPE
+
+    AS->>D: 2. Device code + user code + verification URI
+
+    Note over D: device_code + user_code + verification_uri<br/>+ user_code_expires_in + interval
+
+    D->>U: 3. Display: "Go to verification_uri, enter user_code"
+
+    loop Polling every interval
+        D->>AS: 4. Check device code status
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=urn:ietf:params:oauth:grant-type:device_code&<br/>device_code=DEVICE_CODE&<br/>client_id=CLIENT_ID
+        AS->>D: 5. authorization_pending OR slow_down OR access_denied OR expired_token
+    end
+
+    U->>B: 6. Navigate to verification_uri
+    B->>AS: 7. GET verification_uri  
+    AS->>U: 8. Enter user_code form
+    U->>AS: 9. Submit user_code
+    AS->>U: 10. Show login form
+    U->>AS: 11. Username/password
+    AS->>U: 12. Show consent screen
+    U->>AS: 13. User grants consent
+    AS->>B: 14. Device authorization complete
+
+    Note over AS: Device gets approved after successful authentication
+
+    D->>AS: 15. Final polling request
+    AS->>D: 16. JWT access_token + refresh_token
+
+    Note over D: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+
+    D->>D: 17. Store tokens on constant update
+    D->>RS: 18. API call with JWT Bearer token
+
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    RS->>RS: 19. Validate JWT locally<br/>(Check expiry, iss, aud, etc.)
+    RS->>D: 20. Protected data
+
+    Note over D,RS: Token Refresh Flow (background process)
+
+    D->>AS: 21. Token refresh request
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+
+    AS->>D: 22. Generate new JWT access token
+    D->>D: 23. Update token in persistent storage
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>No browser required on device</li>
+                        <li>User authenticates on familiar device</li>
+                        <li>Secure for input-limited devices</li>
+                        <li>Works with any user device</li>
+                        <li>Industry standard for IoT/TV</li>
+                        <li>Good user experience</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Complex polling implementation</li>
+                        <li>Requires user to have another device</li>
+                        <li>Potential for user code expiration</li>
+                        <li>Higher implementation complexity</li>
+                        <li>Network dependency for polling</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Respect polling intervals</li>
+                        <li>Handle slow_down responses</li>
+                        <li>Implement exponential backoff</li>
+                        <li>Clear user instructions</li>
+                        <li>Timeout handling for user codes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">📺 Device Flow Steps Explained</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">1️⃣ Device Registration</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Device requests device code and user code from authorization server with client ID and scopes.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">2️⃣ User Instructions</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Device displays verification URI and user code. User visits URI on their phone/computer.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">3️⃣ User Authentication</h4>
+                        <p style="color: #666; font-size: 0.9rem;">User enters user code, authenticates, and grants consent on their personal device.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">4️⃣ Device Polling</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Device polls token endpoint until user completes authorization or code expires.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">🛠️ Implementation Best Practices</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⏱️ Polling Strategy</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Start with server-provided interval</li>
+                            <li>Implement exponential backoff on errors</li>
+                            <li>Handle "slow_down" response properly</li>
+                            <li>Set maximum polling duration</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📱 User Experience</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Display clear, simple instructions</li>
+                            <li>Show QR codes for easy URL access</li>
+                            <li>Provide progress indicators</li>
+                            <li>Handle timeout gracefully</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔒 Security Considerations</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Use short user code expiration</li>
+                            <li>Generate cryptographically random codes</li>
+                            <li>Validate device code on each poll</li>
+                            <li>Implement rate limiting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fff3e0; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #F57C00; margin-bottom: 20px;">📋 Common Use Cases</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📺 Smart TVs</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Netflix, YouTube, Spotify apps where typing passwords on TV remote is inconvenient.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🖥️ CLI Tools</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Command-line applications, deployment tools, CI/CD systems requiring user authorization.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🏠 IoT Devices</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Smart home devices, sensors, embedded systems with no screen or input capabilities.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🎮 Gaming Consoles</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Xbox, PlayStation apps where users prefer to authenticate on their phone.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="a3.html" class="btn btn-secondary">← Previous: A3 (PKCE)</a>
+                <a href="b1.html" class="btn btn-primary">Next: B1 (Client Credentials + JWT) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
