@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A3: Authorization Code + PKCE + JWT - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>A3: Authorization Code + PKCE + JWT</h1>
+            <p>Single Page Apps and mobile applications</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #2E7D32; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Modern Single Page Applications (SPAs) and mobile applications.
+                    This is the current standard for public clients, using PKCE to secure the authorization code exchange.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #2E7D32;">Client Type:</strong><br/>
+                        <span style="color: #666;">Public (SPA/Mobile)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Token Type:</strong><br/>
+                        <span style="color: #666;">JWT + PKCE Security</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Use Case:</strong><br/>
+                        <span style="color: #666;">Modern SPAs & Mobile Apps</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Complexity:</strong><br/>
+                        <span style="color: #666;">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the Authorization Code flow with PKCE (Proof Key for Code Exchange) protection.
+                PKCE prevents authorization code interception attacks in public clients where client secrets cannot be stored securely.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant U as User/Resource Owner<br/>(e.g Browser/Mobile App)
+    participant CA as Client Application
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    Note over U,RS: OAuth2 Authorization Code Flow with PKCE<br/>(Best approach for Browser-hosted App for redirections)
+
+    CA->>CA: 1. Application starts to access protected resource<br/>at the request of user, for the enterprise
+    CA->>CA: 2. Check code verifier
+    CA->>CA: 3. User grants consent
+    CA->>CA: 4. Redirect back to client with authorization code
+    
+    Note over CA: GET https://client.app.com/callback?<br/>code=AUTHORIZATION_CODE&<br/>state=RANDOM_STATE_VALUE
+    
+    CA->>AS: 5. Browser app follows redirect with authorization code
+    CA->>AS: 6. Exchange authorization code for tokens
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=authorization_code&<br/>code=AUTHORIZATION_CODE&<br/>client_id=CLIENT_ID&<br/>code_verifier=CODE_VERIFIER&<br/>redirect_uri=REDIRECT_URI
+    
+    AS->>AS: 7. Validate code challenge vs verifier
+    AS->>CA: 8. Returns JWT access token + refresh token
+    
+    Note over CA: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+    
+    CA->>CA: 9. Store tokens in memory
+    CA->>U: 10. Return protected resource  
+    U->>CA: 11. Request protected resource
+    CA->>RS: 12. API call with opaque token
+    
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+    
+    RS->>AS: 13. Token introspection request
+    
+    Note over AS: POST https://auth.server.com/introspect<br/>token=JWT_ACCESS_TOKEN&<br/>token_type_hint=access_token
+    
+    AS->>RS: 14. Token introspection response
+    
+    Note over RS: "active": true<br/>"client_id": "s6BhdRkqt3"<br/>"username": "jdoe"<br/>"scope": "read write"<br/>"exp": 1419356238<br/>"sub": "Z5O3upPC88QrAjx00dis"<br/>"aud": "https://protected.example.net/resource"
+    
+    RS->>CA: 15. Return protected data
+    CA->>U: 16. Return API call result
+    
+    Note over U,RS: Token Refresh Flow (when access token expires)
+    
+    CA->>RS: 17. Return token request
+    RS->>CA: 18. Return 401 Unauthorized  
+    CA->>AS: 19. Token refresh request
+    
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID
+    
+    AS->>CA: 20. Generate new JWT access token
+    CA->>CA: 21. Update token in memory
+    CA->>RS: 22. Return with JWT access token
+    RS->>CA: 23. Return protected data
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>No client secret required</li>
+                        <li>PKCE prevents code interception</li>
+                        <li>Modern security standard</li>
+                        <li>Works in public environments</li>
+                        <li>Fast JWT validation</li>
+                        <li>Mobile and SPA friendly</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Tokens stored in browser memory</li>
+                        <li>Lost on page refresh (by design)</li>
+                        <li>Requires PKCE implementation</li>
+                        <li>More complex than client credentials</li>
+                        <li>Cannot revoke JWT immediately</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Generate secure code verifier</li>
+                        <li>Use SHA256 for code challenge</li>
+                        <li>Store tokens in memory only</li>
+                        <li>Implement silent refresh flows</li>
+                        <li>Handle CORS properly</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🔒 PKCE Security Deep Dive</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🎲 Code Verifier</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Cryptographically random string (43-128 chars) generated by the client for each authorization request.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔐 Code Challenge</h4>
+                        <p style="color: #666; font-size: 0.9rem;">SHA256 hash of the code verifier, sent with the authorization request. Auth server verifies match.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🛡️ Attack Prevention</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Even if authorization code is intercepted, attacker cannot exchange it without the original code verifier.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">📱 SPA & Mobile Best Practices</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔄 Token Storage</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Store access tokens in memory only</li>
+                            <li>Use secure storage for refresh tokens</li>
+                            <li>Never use localStorage for sensitive tokens</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⚡ Performance Tips</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Implement token refresh before expiry</li>
+                            <li>Use silent refresh in hidden iframes</li>
+                            <li>Cache user info to reduce API calls</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔐 Security Measures</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Validate JWT signatures locally</li>
+                            <li>Check token expiration times</li>
+                            <li>Implement proper logout flows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="a2.html" class="btn btn-secondary">← Previous: A2 (Opaque + Introspection)</a>
+                <a href="a4.html" class="btn btn-primary">Next: A4 (Device Flow) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
