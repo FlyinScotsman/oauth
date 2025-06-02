@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1: Client Credentials + JWT + Refresh - OAuth2 Pattern Explorer</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html">OAuth2 Explorer</a>
+            </div>
+            <div class="nav-menu">
+                <a href="../learn/basics.html" class="nav-link">Learn Basics</a>
+                <a href="../tools/decision.html" class="nav-link">Decision Tree</a>
+                <a href="overview.html" class="nav-link">All Patterns</a>
+                <a href="../learn/comparison.html" class="nav-link">Quick Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>B1: Client Credentials + JWT + Refresh</h1>
+            <p>Enterprise microservices with token rotation</p>
+        </div>
+
+        <div class="main-content page-transition">
+            <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                <h3 style="color: #2E7D32; margin-bottom: 15px;">🎯 Pattern Overview</h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    <strong>Best for:</strong> Production microservice architectures requiring high availability and performance.
+                    This pattern combines the speed of JWT validation with the security of refresh token rotation.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div>
+                        <strong style="color: #2E7D32;">Client Type:</strong><br/>
+                        <span style="color: #666;">Confidential (Service)</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Token Type:</strong><br/>
+                        <span style="color: #666;">JWT + Refresh Token</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Use Case:</strong><br/>
+                        <span style="color: #666;">High-Performance Microservices</span>
+                    </div>
+                    <div>
+                        <strong style="color: #2E7D32;">Complexity:</strong><br/>
+                        <span style="color: #666;">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-title">Sequence Diagram</div>
+            <div class="step-description">
+                This diagram shows the Client Credentials flow with JWT tokens and background refresh processes.
+                Note the performance optimization of local JWT validation and proactive token refresh.
+            </div>
+
+            <div class="diagram-container">
+                <div id="mermaid-diagram" class="mermaid">
+sequenceDiagram
+    participant CA as Client Application
+    participant AS as Authorization Server  
+    participant RS as Resource Server
+    participant TS as Token Store/Caching
+
+    Note over CA,TS: Client Client Credentials Flow (machine to machine)<br/>(Best approach for microservices for performance)
+
+    Note over CA: Background refresh process
+    loop Every 45 minutes
+        CA->>AS: 1. Request access token using client credentials
+        Note over AS: POST https://auth.server.com/token<br/>grant_type=client_credentials&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET&<br/>scope=SCOPE
+        AS->>CA: 2. Generate new JWT access token + refresh token
+        Note over CA: "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."<br/>"token_type": "Bearer"<br/>"expires_in": "3600"<br/>"refresh_token": "v1StGXR8_Z5jdHi6B-myT"<br/>"scope": "read write"
+        CA->>TS: 3. Cache new tokens
+    end
+
+    Note over CA: API call process  
+    CA->>TS: 4. Get cached JWT
+    TS->>CA: 5. Return JWT access token
+    CA->>RS: 6. API call with JWT Bearer token
+    Note over RS: Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+    RS->>RS: 7. Validate JWT locally (fast)
+    Note over RS: JWT Token Validation<br/>• Verify signature<br/>• Check expiry<br/>• Validate issuer<br/>• Check audience<br/>• Verify claims (scope, etc.)
+    RS->>CA: 8. Protected data
+
+    Note over CA: Token expiry handling
+    CA->>RS: 9. API call with expired JWT
+    RS->>CA: 10. 401 Unauthorized
+    CA->>AS: 11. POST /token (client_credentials + refresh_token)
+    Note over AS: POST https://auth.server.com/token<br/>grant_type=refresh_token&<br/>refresh_token=REFRESH_TOKEN&<br/>client_id=CLIENT_ID&client_secret=CLIENT_SECRET
+    AS->>CA: 12. New JWT access_token + refresh_token
+    CA->>TS: 13. Update token in constant storage
+    CA->>RS: 14. Retry API call with new JWT
+    RS->>CA: 15. Protected data
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 30px 0;">
+                <div style="background: #e8f5e8; border-left: 4px solid #4CAF50; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #2E7D32; margin-bottom: 15px;">✅ Advantages</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Extremely fast API calls (local JWT validation)</li>
+                        <li>High availability and scalability</li>
+                        <li>Background token refresh</li>
+                        <li>Stateless resource servers</li>
+                        <li>Reduced auth server load</li>
+                        <li>Production-ready security</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff3e0; border-left: 4px solid #FF9800; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #F57C00; margin-bottom: 15px;">⚠️ Considerations</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Cannot revoke JWT tokens immediately</li>
+                        <li>Requires background refresh logic</li>
+                        <li>Client secret management needed</li>
+                        <li>Token storage and caching required</li>
+                        <li>More complex than simple flows</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e8f4fd; border-left: 4px solid #2196F3; padding: 25px; border-radius: 10px;">
+                    <h4 style="color: #1976D2; margin-bottom: 15px;">🔧 Implementation Notes</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #666;">
+                        <li>Implement circuit breakers</li>
+                        <li>Use Redis/memory for token caching</li>
+                        <li>Schedule background refresh jobs</li>
+                        <li>Validate JWT signatures locally</li>
+                        <li>Monitor token refresh success rates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">🏗️ Microservices Architecture Benefits</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">⚡ Performance</h4>
+                        <p style="color: #666; font-size: 0.9rem;">JWT validation happens locally without network calls, enabling sub-millisecond authorization decisions.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">🔄 Resilience</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Services continue operating even if auth server is temporarily unavailable due to cached tokens.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #667eea; margin-bottom: 10px;">📈 Scalability</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Reduced load on authorization server allows horizontal scaling of resource services.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f4fd; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #1976D2; margin-bottom: 20px;">🔄 Background Refresh Strategy</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">⏰ Timing Strategy</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Refresh 15 minutes before expiry</li>
+                            <li>Use cron jobs or scheduled tasks</li>
+                            <li>Implement jitter to avoid thundering herd</li>
+                            <li>Fallback to synchronous refresh on failure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔒 Security Measures</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Rotate refresh tokens on each use</li>
+                            <li>Secure client secret storage</li>
+                            <li>Log all token operations</li>
+                            <li>Monitor for suspicious patterns</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📊 Monitoring</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 0.9rem;">
+                            <li>Track refresh success/failure rates</li>
+                            <li>Alert on token expiration issues</li>
+                            <li>Monitor API call patterns</li>
+                            <li>Performance metrics for JWT validation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #e8f5e8; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #2E7D32; margin-bottom: 20px;">🚀 Production Deployment Tips</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🏪 Token Storage</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Use Redis or in-memory cache with TTL. Consider database backup for refresh tokens in critical systems.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🔐 Secret Management</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Use HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault for client secret storage and rotation.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">📈 Load Balancing</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Distribute token refresh across multiple instances. Consider sticky sessions for token consistency.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #333; margin-bottom: 10px;">🚨 Error Handling</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Implement exponential backoff, circuit breakers, and graceful degradation for auth failures.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="a4.html" class="btn btn-secondary">← Previous: A4 (Device Flow)</a>
+                <a href="b2.html" class="btn btn-primary">Next: B2 (Opaque + Refresh) →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 OAuth2 Pattern Explorer. Educational resource for learning OAuth2 flows and security patterns.</p>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../learn/basics.html">Learn Basics</a>
+                <a href="overview.html">Patterns</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
